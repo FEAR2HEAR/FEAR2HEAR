@@ -1,0 +1,7381 @@
+/* =========================================================
+   FEAR2HEAR — APP.CSS
+   TRANG 1 + REGISTER + LOGIN + INFO + MAIN
+   ========================================================= */
+
+
+/* =========================================================
+   FONT
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Birthstone&family=Noto+Sans:wght@400;500;600;700&family=Paytone+One&family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    background: #10051d;
+    color: #ffffff;
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TRANG 1 — LANDING PAGE
+   ========================================================= */
+
+.landing-page {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    overflow: hidden;
+
+    background: #10051d;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+
+/* =========================================================
+   LANDING CONTENT
+   ========================================================= */
+
+.landing-content {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-top: 165px;
+}
+
+
+/* =========================================================
+   LANDING LOGO
+   ========================================================= */
+
+.landing-logo {
+    margin: 0;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 86px;
+    font-weight: 900;
+
+    line-height: 1;
+    letter-spacing: -2px;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 12px #ffffff,
+        0 0 25px rgba(255, 255, 255, 0.95),
+        0 0 45px rgba(221, 199, 255, 0.85),
+        0 0 70px rgba(166, 93, 255, 0.45);
+}
+
+
+/* =========================================================
+   LANDING SLOGAN
+   ========================================================= */
+
+.landing-slogan {
+    margin: 22px 0 0;
+
+    font-family: "Birthstone", cursive;
+
+    font-size: 42px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    color: #ffffff;
+
+    text-align: center;
+    white-space: nowrap;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.9),
+        0 0 12px rgba(255, 255, 255, 0.55),
+        0 0 22px rgba(205, 174, 255, 0.45);
+}
+
+
+/* =========================================================
+   LANDING BUTTON
+   ========================================================= */
+
+.landing-btn {
+    position: relative;
+
+    width: 265px;
+    height: 88px;
+
+    margin-top: 145px;
+
+    border: none;
+    border-radius: 50px;
+
+    background: #360875;
+    color: #ffffff;
+
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 31px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 10px rgba(153, 70, 255, 0.75),
+        0 0 25px rgba(145, 61, 255, 0.55),
+        0 0 45px rgba(117, 43, 220, 0.3);
+
+    text-shadow:
+        0 0 4px #ffffff,
+        0 0 9px rgba(255, 255, 255, 0.8),
+        0 0 16px rgba(205, 174, 255, 0.65);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.landing-btn:hover {
+    transform: scale(1.03);
+
+    box-shadow:
+        0 0 12px rgba(170, 80, 255, 0.9),
+        0 0 30px rgba(155, 65, 255, 0.75),
+        0 0 50px rgba(125, 45, 230, 0.5);
+}
+
+.landing-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   NGÔI SAO TRANG 1
+   GIỮ NGUYÊN MÀU + GLOW + VỊ TRÍ + KÍCH THƯỚC
+   ========================================================= */
+
+.star {
+    position: absolute;
+
+    z-index: 6;
+
+    color: #ffffff;
+
+    font-size: 38px;
+
+    text-shadow:
+        0 0 6px #ffffff,
+        0 0 14px rgba(255, 255, 255, 0.85),
+        0 0 25px rgba(215, 190, 255, 0.7);
+}
+
+.star-left {
+    top: 176px;
+    left: 19%;
+}
+
+.star-right {
+    top: 345px;
+    right: 19%;
+
+    font-size: 35px;
+}
+
+
+/* =========================================================
+   SÓNG NỀN
+   ========================================================= */
+
+.wave-lines,
+.register-wave-lines,
+.login-wave-lines {
+    position: absolute;
+
+    left: -5%;
+    bottom: -5px;
+
+    width: 110%;
+    height: 570px;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 600' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23352b45' stroke-width='1.5'%3E%3Cpath d='M0 60 C220 170 400 80 570 210 C760 355 850 510 1050 365 C1250 220 1400 310 1600 190'/%3E%3Cpath d='M0 80 C220 190 400 100 570 230 C760 375 850 530 1050 385 C1250 240 1400 330 1600 210'/%3E%3Cpath d='M0 100 C220 210 400 120 570 250 C760 395 850 550 1050 405 C1250 260 1400 350 1600 230'/%3E%3Cpath d='M0 120 C220 230 400 140 570 270 C760 415 850 570 1050 425 C1250 280 1400 370 1600 250'/%3E%3Cpath d='M0 140 C220 250 400 160 570 290 C760 435 850 590 1050 445 C1250 300 1400 390 1600 270'/%3E%3Cpath d='M0 160 C220 270 400 180 570 310 C760 455 850 610 1050 465 C1250 320 1400 410 1600 290'/%3E%3Cpath d='M0 180 C220 290 400 200 570 330 C760 475 850 630 1050 485 C1250 340 1400 430 1600 310'/%3E%3Cpath d='M0 200 C220 310 400 220 570 350 C760 495 850 650 1050 505 C1250 360 1400 450 1600 330'/%3E%3Cpath d='M0 220 C220 330 400 240 570 370 C760 515 850 670 1050 525 C1250 380 1400 470 1600 350'/%3E%3Cpath d='M0 240 C220 350 400 260 570 390 C760 535 850 690 1050 545 C1250 400 1400 490 1600 370'/%3E%3Cpath d='M0 260 C220 370 400 280 570 410 C760 555 850 710 1050 565 C1250 420 1400 510 1600 390'/%3E%3Cpath d='M0 280 C220 390 400 300 570 430 C760 575 850 730 1050 585 C1250 440 1400 530 1600 410'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.wave-lines {
+    opacity: 0.72;
+}
+
+.register-wave-lines,
+.login-wave-lines {
+    opacity: 0.55;
+}
+
+
+/* =========================================================
+   TRANG 2 — REGISTER
+   ========================================================= */
+
+.register-page {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    overflow: hidden;
+
+    background: #10051d;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 80px 20px 40px;
+}
+
+
+/* =========================================================
+   REGISTER LOGO
+   ========================================================= */
+
+.register-logo {
+    position: absolute;
+
+    top: 22px;
+    left: 20px;
+
+    z-index: 10;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 30px;
+    font-weight: 900;
+
+    line-height: 1;
+    letter-spacing: -1px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 12px #ffffff,
+        0 0 22px rgba(190, 150, 255, 0.8);
+}
+
+
+/* =========================================================
+   REGISTER BOX
+   ========================================================= */
+
+.register-box {
+    position: relative;
+
+    z-index: 5;
+
+    width: 560px;
+
+    padding: 70px 42px 30px;
+
+    background: rgba(43, 10, 70, 0.92);
+
+    border-radius: 28px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-shadow:
+        0 0 25px rgba(80, 20, 130, 0.12);
+}
+
+
+/* =========================================================
+   REGISTER AVATAR
+   ========================================================= */
+
+.register-avatar {
+    position: absolute;
+
+    top: -48px;
+
+    width: 92px;
+    height: 92px;
+
+    border-radius: 50%;
+
+    background: #421184;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.avatar-head {
+    position: absolute;
+
+    top: 20px;
+
+    width: 29px;
+    height: 29px;
+
+    border-radius: 50%;
+
+    background: #e8dff0;
+}
+
+.avatar-body {
+    position: absolute;
+
+    bottom: 12px;
+
+    width: 50px;
+    height: 34px;
+
+    border-radius: 38px 38px 20px 20px;
+
+    background: #e8dff0;
+}
+
+
+/* =========================================================
+   REGISTER INPUT
+   ========================================================= */
+
+.register-input {
+    width: 100%;
+    height: 54px;
+
+    margin-bottom: 15px;
+
+    padding: 0 18px;
+
+    border: none;
+    outline: none;
+
+    border-radius: 12px;
+
+    background: #f8f4fc;
+
+    color: #3b3150;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.register-input::placeholder {
+    color: #b7a7ca;
+    opacity: 1;
+
+    font-family: "Noto Sans", sans-serif;
+}
+
+.register-input:focus {
+    outline: 2px solid rgba(160, 92, 230, 0.45);
+}
+
+.register-input.input-error {
+    outline: 2px solid #e05272;
+    background: #fff7f8;
+}
+
+.register-input.input-error::placeholder {
+    color: #d88999;
+}
+
+
+/* =========================================================
+   REGISTER PASSWORD
+   ========================================================= */
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper .register-input {
+    padding-right: 58px;
+}
+
+
+/* =========================================================
+   REGISTER EYE
+   ========================================================= */
+
+.eye-button {
+    position: absolute;
+
+    top: 50%;
+    right: 15px;
+
+    transform: translateY(-50%);
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    background: transparent;
+
+    color: #aa9abf;
+
+    font-size: 21px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eye-button:hover {
+    color: #80649d;
+}
+
+
+/* =========================================================
+   REGISTER BUTTON
+   ========================================================= */
+
+.register-button {
+    min-width: 205px;
+    height: 48px;
+
+    margin-top: 6px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 25px;
+
+    background: #48118a;
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.register-button:hover {
+    background: #54149e;
+    transform: translateY(-2px);
+}
+
+.register-button:active {
+    transform: scale(0.98);
+}
+
+.register-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   REGISTER LOGIN BUTTON
+   ========================================================= */
+
+.login-button {
+    min-width: 205px;
+    height: 48px;
+
+    margin-top: 6px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 25px;
+
+    background: #48118a;
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.login-button:hover {
+    background: #54149e;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   REGISTER ERROR
+   ========================================================= */
+
+.register-error-message {
+    width: 100%;
+
+    margin: -3px 0 8px;
+
+    color: #ff9eb1;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   TRANG 3 — LOGIN
+   ========================================================= */
+
+.login-page {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    overflow: hidden;
+
+    background: #10051d;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 80px 20px 40px;
+}
+
+
+/* =========================================================
+   LOGIN LOGO
+   ========================================================= */
+
+.login-logo {
+    position: absolute;
+
+    top: 22px;
+    left: 20px;
+
+    z-index: 10;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 30px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 12px #ffffff,
+        0 0 22px rgba(190, 150, 255, 0.8);
+}
+
+
+/* =========================================================
+   LOGIN BOX
+   ========================================================= */
+
+.login-box {
+    position: relative;
+
+    z-index: 5;
+
+    width: 560px;
+
+    padding: 70px 42px 30px;
+
+    background: rgba(43, 10, 70, 0.92);
+
+    border-radius: 28px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-shadow:
+        0 0 25px rgba(80, 20, 130, 0.12);
+}
+
+
+/* =========================================================
+   LOGIN AVATAR
+   ========================================================= */
+
+.login-avatar {
+    position: absolute;
+
+    top: -48px;
+
+    width: 92px;
+    height: 92px;
+
+    border-radius: 50%;
+
+    background: #421184;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.login-avatar-head {
+    position: absolute;
+
+    top: 20px;
+
+    width: 29px;
+    height: 29px;
+
+    border-radius: 50%;
+
+    background: #e8dff0;
+}
+
+.login-avatar-body {
+    position: absolute;
+
+    bottom: 12px;
+
+    width: 50px;
+    height: 34px;
+
+    border-radius: 38px 38px 20px 20px;
+
+    background: #e8dff0;
+}
+
+
+/* =========================================================
+   LOGIN INPUT
+   ========================================================= */
+
+.login-input {
+    width: 100%;
+    height: 54px;
+
+    margin-bottom: 15px;
+
+    padding: 0 18px;
+
+    border: none;
+    outline: none;
+
+    border-radius: 12px;
+
+    background: #f8f4fc;
+
+    color: #3b3150;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    text-transform: none;
+}
+
+.login-input::placeholder {
+    color: #b7a7ca;
+    opacity: 1;
+
+    font-family: "Noto Sans", sans-serif;
+}
+
+.login-input:focus {
+    outline: 2px solid rgba(160, 92, 230, 0.45);
+}
+
+.login-input-error {
+    outline: 2px solid #e05272;
+    background: #fff7f8;
+}
+
+.login-password-input {
+    text-transform: none !important;
+}
+
+
+/* =========================================================
+   LOGIN PASSWORD
+   ========================================================= */
+
+.login-password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.login-password-wrapper .login-input {
+    padding-right: 58px;
+}
+
+
+/* =========================================================
+   LOGIN EYE
+   ========================================================= */
+
+.login-eye-button {
+    position: absolute;
+
+    top: 50%;
+    right: 15px;
+
+    transform: translateY(-50%);
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    background: transparent;
+
+    color: #b7a7ca;
+
+    font-size: 21px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-eye-button:hover {
+    color: #80649d;
+}
+
+
+/* =========================================================
+   LOGIN OPTIONS
+   ========================================================= */
+
+.login-options {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: -5px;
+    margin-bottom: 8px;
+}
+
+.remember-label {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+}
+
+.remember-label input {
+    display: none;
+}
+
+.custom-check {
+    width: 20px;
+    height: 20px;
+
+    background: #54149e;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remember-label input:checked + .custom-check::after {
+    content: "✓";
+
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+.forgot-button {
+    border: none;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   LOGIN SUBMIT
+   ========================================================= */
+
+.login-submit-button {
+    width: 205px;
+    height: 48px;
+
+    margin-top: 6px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 25px;
+
+    background: #48118a;
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    text-transform: uppercase;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.login-submit-button:hover {
+    background: #54149e;
+    transform: translateY(-2px);
+}
+
+.login-submit-button:active {
+    transform: scale(0.98);
+}
+
+.login-submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LOGIN ERROR
+   ========================================================= */
+
+.login-error-message {
+    width: 100%;
+
+    margin: -3px 0 8px;
+
+    color: #ff9eb1;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   GO REGISTER
+   ========================================================= */
+
+.go-register-button {
+    min-width: 205px;
+    height: 48px;
+
+    margin-top: 6px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 25px;
+
+    background: #48118a;
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    text-transform: uppercase;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.go-register-button:hover {
+    background: #54149e;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   LOGIN OR
+   ========================================================= */
+
+.login-or {
+    margin-top: 10px;
+
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   GOOGLE
+   ========================================================= */
+
+.google-button {
+    width: 55px;
+    height: 55px;
+
+    margin-top: 10px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.google-g {
+    font-family: Arial, sans-serif;
+
+    font-size: 36px;
+    font-weight: 700;
+
+    background: linear-gradient(
+        135deg,
+        #4285f4 20%,
+        #34a853 40%,
+        #fbbc05 60%,
+        #ea4335 80%
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* =========================================================
+   Z-INDEX
+   ========================================================= */
+
+.register-logo,
+.register-box,
+.login-logo,
+.login-box {
+    z-index: 5;
+}
+
+
+/* =========================================================
+   TRANG 4 — INFO
+   ========================================================= */
+
+.info-page {
+    position: relative;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    background: #10051d;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   INFO LOGO
+   ========================================================= */
+
+.info-logo {
+    position: absolute;
+
+    top: 25px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    margin: 0;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 48px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    color: #ffffff;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 12px #ffffff,
+        0 0 22px rgba(190, 150, 255, 0.85),
+        0 0 38px rgba(166, 93, 255, 0.55);
+}
+
+
+/* =========================================================
+   INFO CONTENT
+   ========================================================= */
+
+.info-content {
+    position: absolute;
+
+    top: 145px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 1160px;
+    height: 420px;
+
+    display: grid;
+
+    grid-template-columns: 520px 520px;
+
+    column-gap: 120px;
+}
+
+
+/* =========================================================
+   INFO COLUMN
+   ========================================================= */
+
+.info-column {
+    position: relative;
+
+    width: 520px;
+    height: 420px;
+}
+
+
+/* =========================================================
+   INFO HEADING
+   ========================================================= */
+
+.info-heading {
+    position: absolute;
+
+    top: -48px;
+    left: 15px;
+
+    margin: 0;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 32px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    color: #ffe38b;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 0 5px rgba(255, 220, 120, 0.3);
+}
+
+
+/* =========================================================
+   INFO SECTION
+   ========================================================= */
+
+.info-section {
+    width: 520px;
+    height: 420px;
+
+    padding: 30px 34px 24px;
+
+    background: #2d0a49;
+
+    border-radius: 29px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+
+/* =========================================================
+   INFO TEXT
+   ========================================================= */
+
+.info-section p {
+    margin: 0 0 16px;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 18px;
+    font-weight: 500;
+
+    line-height: 1.55;
+
+    color: #ffffff;
+
+    text-align: left;
+}
+
+.info-section strong {
+    font-family: "Noto Sans", sans-serif;
+
+    font-weight: 800;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   INFO NOTE
+   ========================================================= */
+
+.info-note {
+    margin-top: 20px !important;
+    margin-bottom: 0 !important;
+
+    font-family: "Noto Sans", sans-serif !important;
+
+    font-size: 17px !important;
+    font-weight: 800 !important;
+
+    font-style: italic;
+
+    line-height: 1.5 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   INFO CONTINUE BUTTON
+   ========================================================= */
+
+.info-continue-btn {
+    position: absolute;
+
+    z-index: 20;
+
+    left: 50%;
+    bottom: 40px;
+
+    transform: translateX(-50%);
+
+    width: 235px;
+    height: 68px;
+
+    margin: 0;
+    padding: 0;
+
+    border: none;
+    border-radius: 35px;
+
+    background: #3b0878;
+
+    color: #ffffff;
+
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 24px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 10px rgba(180, 120, 255, 0.7),
+        0 0 25px rgba(140, 60, 255, 0.5),
+        0 0 40px rgba(120, 40, 220, 0.3);
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 10px rgba(255, 255, 255, 0.9);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.info-continue-btn:hover {
+    transform: translateX(-50%) scale(1.03);
+}
+
+.info-continue-btn:active {
+    transform: translateX(-50%) scale(0.98);
+}
+
+
+/* =========================================================
+   INFO GLOW
+   ========================================================= */
+
+.info-page::before {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    top: -320px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(140, 40, 215, 0.16);
+
+    filter: blur(100px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   TRANG CHÍNH — MAIN PAGE
+   ========================================================= */
+
+.main-page {
+    position: relative;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    background: #10051d;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   MAIN LOGO + DATE
+   ========================================================= */
+
+.main-brand {
+    position: absolute;
+
+    top: 24px;
+    left: 20px;
+
+    z-index: 20;
+}
+
+.main-logo {
+    margin: 0;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 43px;
+    font-weight: 900;
+
+    line-height: 1;
+    letter-spacing: -1.5px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.95),
+        0 0 12px rgba(255, 255, 255, 0.9),
+        0 0 22px rgba(210, 190, 255, 0.8),
+        0 0 35px rgba(180, 130, 255, 0.5);
+}
+
+.main-date {
+    margin-top: 10px;
+    margin-left: 18px;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 21px;
+    font-weight: 400;
+
+    font-style: italic;
+
+    line-height: 1.2;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 7px rgba(255, 255, 255, 0.35);
+}
+
+
+/* =========================================================
+   MAIN CENTER
+   ========================================================= */
+
+.main-center {
+    position: absolute;
+
+    top: 82px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 760px;
+    height: calc(100dvh - 82px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   SAM CONTAINER
+   ========================================================= */
+
+.sam-container {
+    position: relative;
+
+    width: 620px;
+    height: 445px;
+
+    margin-top: 0;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: visible;
+}
+
+.sam-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block;
+}
+
+
+/* =========================================================
+   MAINPAGE SLOGAN
+   GIỐNG FONT + MÀU + GLOW CỦA TRANG 1
+   ========================================================= */
+
+.main-slogan {
+    margin-top: -4px;
+
+    font-family: "Birthstone", cursive;
+
+    font-size: 58px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.9),
+        0 0 12px rgba(255, 255, 255, 0.55),
+        0 0 22px rgba(205, 174, 255, 0.45);
+
+    transform: rotate(-1deg);
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MAIN START BUTTON
+   ========================================================= */
+
+.main-start-btn {
+    width: 205px;
+    height: 55px;
+
+    margin-top: 16px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 30px;
+
+    background: #3b0878;
+
+    color: #ffffff;
+
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 19px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 8px rgba(180, 120, 255, 0.8),
+        0 0 18px rgba(150, 80, 255, 0.5),
+        0 0 30px rgba(130, 60, 255, 0.25);
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 10px rgba(255, 255, 255, 0.95),
+        0 0 15px rgba(220, 180, 255, 0.8);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    flex-shrink: 0;
+}
+
+.main-start-btn:hover {
+    transform: scale(1.035);
+
+    box-shadow:
+        0 0 10px rgba(200, 150, 255, 0.9),
+        0 0 22px rgba(160, 90, 255, 0.65),
+        0 0 35px rgba(140, 60, 255, 0.4);
+}
+
+.main-start-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   MAIN GLOW
+   ========================================================= */
+
+.main-page::before {
+    content: "";
+
+    position: absolute;
+
+    width: 600px;
+    height: 600px;
+
+    top: 40px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(125, 40, 200, 0.10);
+
+    filter: blur(100px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   1400px → 901px
+   ========================================================= */
+
+@media (max-width: 1400px) and (min-width: 901px) {
+
+    /* ---------- INFO ---------- */
+
+    .info-content {
+        width: calc(100% - 50px);
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr);
+
+        column-gap: 35px;
+    }
+
+    .info-column,
+    .info-section {
+        width: 100%;
+    }
+
+    .info-column {
+        height: 420px;
+    }
+
+    .info-section {
+        height: 420px;
+        padding: 30px 30px 24px;
+    }
+
+    .info-section p {
+        font-size: 17px;
+    }
+
+    .info-heading {
+        font-size: 30px;
+    }
+
+
+    /* ---------- MAIN ---------- */
+
+    .main-logo {
+        font-size: 38px;
+    }
+
+    .main-date {
+        font-size: 19px;
+    }
+
+    .main-center {
+        width: 680px;
+
+        top: 78px;
+
+        height: calc(100dvh - 78px);
+    }
+
+    .sam-container {
+        width: 560px;
+        height: 420px;
+    }
+
+    .main-slogan {
+        font-size: 50px;
+    }
+
+    .main-start-btn {
+        width: 200px;
+        height: 54px;
+
+        margin-top: 15px;
+
+        font-size: 19px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — 900PX
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    /* ---------- LANDING ---------- */
+
+    .landing-content {
+        padding-top: 150px;
+    }
+
+    .landing-logo {
+        font-size: 65px;
+    }
+
+    .landing-slogan {
+        font-size: 34px;
+    }
+
+    .landing-btn {
+        margin-top: 110px;
+    }
+
+    .star-left {
+        left: 10%;
+    }
+
+    .star-right {
+        right: 10%;
+    }
+
+
+    /* ---------- REGISTER ---------- */
+
+    .register-box {
+        width: 90%;
+        max-width: 560px;
+    }
+
+
+    /* ---------- LOGIN ---------- */
+
+    .login-box {
+        width: 90%;
+        max-width: 560px;
+    }
+
+
+    /* ---------- MAIN ---------- */
+
+    .main-logo {
+        font-size: 34px;
+    }
+
+    .main-date {
+        margin-left: 8px;
+        font-size: 18px;
+    }
+
+    .main-center {
+        width: 100%;
+
+        top: 75px;
+
+        height: calc(100dvh - 75px);
+    }
+
+    .sam-container {
+        width: 500px;
+        height: 400px;
+    }
+
+    .main-slogan {
+        font-size: 45px;
+    }
+
+    .main-start-btn {
+        width: 195px;
+        height: 54px;
+
+        margin-top: 15px;
+
+        font-size: 19px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — INFO
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+    .info-page {
+        height: auto;
+
+        min-height: 100vh;
+        min-height: 100dvh;
+
+        overflow: visible;
+
+        padding: 35px 20px 90px;
+    }
+
+    .info-logo {
+        position: relative;
+
+        top: auto;
+        left: auto;
+
+        transform: none;
+
+        margin: 0 auto 65px;
+
+        font-size: 40px;
+
+        text-align: center;
+    }
+
+    .info-content {
+        position: relative;
+
+        top: auto;
+        left: auto;
+
+        transform: none;
+
+        width: 100%;
+        height: auto;
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 55px;
+    }
+
+    .info-column {
+        width: 100%;
+        height: auto;
+    }
+
+    .info-section {
+        width: 100%;
+        height: auto;
+
+        min-height: 0;
+
+        padding: 45px 25px 30px;
+
+        border-radius: 27px;
+    }
+
+    .info-heading {
+        top: -27px;
+        left: 13px;
+
+        font-size: 27px;
+    }
+
+    .info-section p {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .info-note {
+        font-size: 16px !important;
+    }
+
+    .info-continue-btn {
+        position: relative;
+
+        left: auto;
+        bottom: auto;
+
+        transform: none;
+
+        display: block;
+
+        width: 210px;
+        height: 60px;
+
+        margin: 40px auto 0;
+
+        font-size: 22px;
+    }
+
+    .info-continue-btn:hover {
+        transform: scale(1.03);
+    }
+
+    .info-continue-btn:active {
+        transform: scale(0.98);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    /* ---------- LANDING ---------- */
+
+    .landing-content {
+        padding-top: 120px;
+
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .landing-logo {
+        font-size: 46px;
+        letter-spacing: -1px;
+    }
+
+    .landing-slogan {
+        font-size: 28px;
+        white-space: normal;
+    }
+
+    .landing-btn {
+        width: 220px;
+        height: 72px;
+
+        margin-top: 90px;
+
+        font-size: 26px;
+    }
+
+    .star {
+        font-size: 28px;
+    }
+
+    .star-left {
+        top: 140px;
+        left: 8%;
+    }
+
+    .star-right {
+        top: 310px;
+        right: 8%;
+    }
+
+    .wave-lines,
+    .register-wave-lines,
+    .login-wave-lines {
+        height: 430px;
+    }
+
+
+    /* ---------- REGISTER ---------- */
+
+    .register-page {
+        padding: 80px 15px 30px;
+    }
+
+    .register-logo {
+        top: 20px;
+        left: 20px;
+
+        font-size: 25px;
+    }
+
+    .register-box {
+        width: 100%;
+        max-width: 390px;
+
+        padding: 60px 20px 25px;
+
+        border-radius: 25px;
+    }
+
+    .register-avatar {
+        width: 82px;
+        height: 82px;
+
+        top: -42px;
+    }
+
+    .avatar-head {
+        top: 18px;
+
+        width: 26px;
+        height: 26px;
+    }
+
+    .avatar-body {
+        bottom: 10px;
+
+        width: 45px;
+        height: 30px;
+    }
+
+    .register-input {
+        height: 50px;
+
+        font-size: 15px;
+
+        margin-bottom: 13px;
+    }
+
+    .register-button {
+        min-width: 185px;
+
+        height: 45px;
+
+        font-size: 15px;
+    }
+
+    .login-button {
+        min-width: 185px;
+
+        height: 42px;
+
+        font-size: 14px;
+    }
+
+
+    /* ---------- LOGIN ---------- */
+
+    .login-page {
+        padding: 80px 15px 30px;
+    }
+
+    .login-logo {
+        top: 20px;
+        left: 20px;
+
+        font-size: 25px;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 390px;
+
+        padding: 60px 20px 25px;
+
+        border-radius: 25px;
+    }
+
+    .login-avatar {
+        width: 82px;
+        height: 82px;
+
+        top: -42px;
+    }
+
+    .login-avatar-head {
+        top: 18px;
+
+        width: 26px;
+        height: 26px;
+    }
+
+    .login-avatar-body {
+        bottom: 10px;
+
+        width: 45px;
+        height: 30px;
+    }
+
+    .login-input {
+        height: 50px;
+
+        font-size: 15px;
+
+        margin-bottom: 13px;
+    }
+
+    .login-submit-button {
+        width: 185px;
+        height: 45px;
+
+        font-size: 15px;
+    }
+
+    .go-register-button {
+        min-width: 185px;
+
+        height: 42px;
+
+        font-size: 14px;
+    }
+
+
+    /* ---------- MAIN ---------- */
+
+    .main-page {
+        width: 100%;
+
+        height: 100vh;
+        height: 100dvh;
+
+        min-height: 0;
+
+        overflow: hidden;
+    }
+
+    .main-brand {
+        top: 18px;
+        left: 15px;
+    }
+
+    .main-logo {
+        font-size: 28px;
+    }
+
+    .main-date {
+        margin-top: 7px;
+        margin-left: 3px;
+
+        font-size: 15px;
+    }
+
+    .main-center {
+        width: 100%;
+
+        top: 70px;
+
+        height: calc(100dvh - 70px);
+    }
+
+    .sam-container {
+        width: 380px;
+        height: 350px;
+    }
+
+    .main-slogan {
+        font-size: 38px;
+    }
+
+    .main-start-btn {
+        width: 185px;
+        height: 52px;
+
+        margin-top: 15px;
+
+        font-size: 18px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE NHỎ
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .landing-logo {
+        font-size: 40px;
+    }
+
+    .landing-slogan {
+        font-size: 25px;
+    }
+
+    .landing-btn {
+        width: 205px;
+        height: 66px;
+
+        margin-top: 80px;
+
+        font-size: 24px;
+    }
+
+
+    /* ---------- MAIN ---------- */
+
+    .main-logo {
+        font-size: 25px;
+    }
+
+    .main-date {
+        font-size: 14px;
+    }
+
+    .sam-container {
+        width: 330px;
+        height: 320px;
+    }
+
+    .main-slogan {
+        font-size: 33px;
+    }
+
+    .main-start-btn {
+        width: 175px;
+        height: 50px;
+
+        font-size: 17px;
+    }
+}
+/* =========================================================
+   TRANG CHỌN CHỦ ĐỀ
+   ========================================================= */
+
+.topic-page {
+    position: relative;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    min-height: 0;
+
+    overflow: hidden;
+
+    background: #10051d;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.topic-logo {
+    position: absolute;
+
+    top: 20px;
+    left: 20px;
+
+    z-index: 20;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 43px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.95),
+        0 0 12px rgba(255, 255, 255, 0.9),
+        0 0 22px rgba(210, 190, 255, 0.8),
+        0 0 35px rgba(180, 130, 255, 0.5);
+}
+
+
+/* =========================================================
+   TIMER BOX
+   ========================================================= */
+
+.topic-timer-box {
+    position: absolute;
+
+    top: 20px;
+    right: 32px;
+
+    z-index: 30;
+
+    width: 192px;
+
+    border-radius: 7px;
+
+    background: #2b0755;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.topic-timer {
+    width: 100%;
+    height: 49px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #b8a7c8;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 31px;
+    font-weight: 400;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   ĐIỀU CHỈNH THỜI GIAN
+   ========================================================= */
+
+.topic-time-button {
+    width: 100%;
+    height: 29px;
+
+    border: none;
+    border-radius: 0 0 7px 7px;
+
+    background: #35096b;
+
+    color: #d8c7e8;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.topic-time-button:hover {
+    background: #461080;
+}
+
+
+/* =========================================================
+   TIME SETTINGS
+   ========================================================= */
+
+.topic-time-settings {
+    position: absolute;
+
+    top: 86px;
+    right: 0;
+
+    width: 230px;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    background: #2d0a49;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.35),
+        0 0 18px rgba(120, 50, 190, 0.25);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.topic-time-settings label {
+    color: #ffffff;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+.topic-time-input-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.topic-time-input-row input {
+    width: 75px;
+    height: 38px;
+
+    padding: 0 8px;
+
+    border: none;
+    outline: none;
+
+    border-radius: 8px;
+
+    background: #f8f4fc;
+
+    color: #3b3150;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 17px;
+
+    text-align: center;
+}
+
+.topic-time-input-row span {
+    color: #ffffff;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 15px;
+}
+
+.topic-time-confirm {
+    width: 125px;
+    height: 35px;
+
+    border: none;
+    border-radius: 20px;
+
+    background: #4a108d;
+
+    color: #ffffff;
+
+    font-family: "Baloo 2", sans-serif;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease;
+}
+
+.topic-time-confirm:hover {
+    transform: scale(1.03);
+}
+
+
+/* =========================================================
+   NỘI DUNG
+   ========================================================= */
+
+.topic-content {
+    position: absolute;
+
+    top: 190px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* =========================================================
+   TIÊU ĐỀ
+   ========================================================= */
+
+.topic-title {
+    margin: 0 0 42px;
+
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 84px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    color: #ffffff;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.95),
+        0 0 12px rgba(255, 255, 255, 0.8),
+        0 0 24px rgba(205, 174, 255, 0.55);
+}
+/* =========================================================
+   Ô NHẬP CHỦ ĐỀ
+   ========================================================= */
+
+.topic-input {
+    width: 770px;
+    height: 82px;
+
+    padding: 0 30px;
+
+    border: none;
+    outline: none;
+
+    border-radius: 12px;
+
+    background: #f8f4fc;
+
+    color: #49395b;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 30px;
+    font-weight: 400;
+
+    text-align: left;
+}
+
+.topic-input::placeholder {
+    color: #b8a8c9;
+
+    opacity: 1;
+}
+
+.topic-input:focus {
+    outline: 3px solid rgba(160, 100, 220, 0.35);
+}
+
+
+/* =========================================================
+   NÚT TIẾP TỤC
+   ========================================================= */
+
+.topic-continue-btn {
+    width: 325px;
+    height: 82px;
+
+    margin-top: 42px;
+
+    border: none;
+    border-radius: 45px;
+
+    background: #3b0878;
+
+    color: #ffffff;
+
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 29px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 10px rgba(180, 120, 255, 0.65),
+        0 0 22px rgba(150, 80, 255, 0.45);
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 10px rgba(255, 255, 255, 0.9),
+        0 0 17px rgba(220, 180, 255, 0.7);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.topic-continue-btn:hover {
+    transform: scale(1.035);
+
+    box-shadow:
+        0 0 12px rgba(200, 150, 255, 0.85),
+        0 0 28px rgba(160, 90, 255, 0.6);
+}
+
+.topic-continue-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .topic-logo {
+        font-size: 30px;
+
+        top: 18px;
+        left: 15px;
+    }
+
+    .topic-timer-box {
+        top: 18px;
+        right: 15px;
+
+        width: 165px;
+    }
+
+    .topic-timer {
+        font-size: 25px;
+    }
+
+    .topic-time-button {
+        font-size: 12px;
+    }
+
+    .topic-content {
+        top: 180px;
+
+        padding: 0 20px;
+    }
+
+    .topic-title {
+        font-size: 55px;
+
+        margin-bottom: 25px;
+    }
+
+    .topic-input {
+        width: 100%;
+        max-width: 600px;
+
+        height: 70px;
+
+        font-size: 21px;
+
+        padding: 0 22px;
+    }
+
+    .topic-continue-btn {
+        width: 240px;
+        height: 65px;
+
+        margin-top: 35px;
+
+        font-size: 23px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .topic-logo {
+        font-size: 25px;
+    }
+
+    .topic-timer-box {
+        width: 145px;
+    }
+
+    .topic-timer {
+        font-size: 22px;
+    }
+
+    .topic-title {
+        font-size: 43px;
+    }
+
+    .topic-input {
+        height: 62px;
+
+        font-size: 17px;
+    }
+
+    .topic-continue-btn {
+        width: 210px;
+        height: 58px;
+
+        font-size: 20px;
+    }
+}
+/* =========================================================
+   PRACTICE PAGE
+   KÍCH THƯỚC ĐỒNG BỘ VỚI MAIN PAGE
+   ========================================================= */
+
+.practice-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    background: #10051d;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   LOGO
+   GIỐNG MAIN PAGE
+   ========================================================= */
+
+.practice-logo {
+    position: absolute;
+    top: 24px;
+    left: 20px;
+    z-index: 20;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 43px;
+    font-weight: 900;
+    line-height: 1;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.95),
+        0 0 12px rgba(255, 255, 255, 0.9),
+        0 0 22px rgba(210, 190, 255, 0.8),
+        0 0 35px rgba(180, 130, 255, 0.5);
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.practice-timer-box {
+    position: absolute;
+
+    top: 22px;
+    right: 31px;
+
+    z-index: 20;
+
+    width: 200px;
+    height: 64px;
+
+    border-radius: 25px;
+
+    background: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    box-shadow:
+        0 0 15px rgba(130, 60, 210, 0.22);
+}
+
+
+.practice-clock-icon {
+    color: #d7c5e8;
+
+    font-family: Arial, sans-serif;
+    font-size: 45px;
+    font-weight: 400;
+
+    line-height: 1;
+}
+
+
+.practice-timer {
+    color: #d7c5e8;
+
+    font-family: "Noto Sans", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    text-shadow:
+        0 0 7px rgba(255, 255, 255, 0.45);
+}
+
+
+/* =========================================================
+   SAM
+   GIỐNG MAIN PAGE: 620 × 445
+   ========================================================= */
+
+.practice-sam-container {
+    position: absolute;
+
+    top: 82px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 620px;
+    height: 445px;
+
+    margin-top: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: visible;
+}
+
+.practice-sam-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block;
+}
+
+
+/* =========================================================
+   BẠN ĐÃ SẴN SÀNG CHƯA?
+   ========================================================= */
+
+.practice-ready-text {
+    position: absolute;
+
+    top: 520px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 100%;
+
+    text-align: center;
+
+    color: #ffffff;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 25px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+
+/* =========================================================
+   NÚT SẴN SÀNG
+   ========================================================= */
+
+.practice-ready-btn {
+    position: absolute;
+
+    top: 575px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 335px;
+    height: 82px;
+
+    border: none;
+    border-radius: 45px;
+
+    background: #3b0878;
+
+    color: #ffffff;
+
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 30px;
+    font-weight: 400;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 10px rgba(180, 120, 255, 0.55),
+        0 0 25px rgba(150, 80, 255, 0.35);
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 10px rgba(255, 255, 255, 0.9),
+        0 0 18px rgba(220, 180, 255, 0.7);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.practice-ready-btn:hover {
+    transform: translateX(-50%) scale(1.035);
+
+    box-shadow:
+        0 0 12px rgba(200, 150, 255, 0.8),
+        0 0 28px rgba(160, 90, 255, 0.55);
+}
+
+.practice-ready-btn:active {
+    transform: translateX(-50%) scale(0.97);
+}
+
+
+/* =========================================================
+   CHỦ ĐỀ KHI BẮT ĐẦU
+   ========================================================= */
+
+.practice-topic-display {
+    position: absolute;
+
+    left: 50%;
+    bottom: 35px;
+
+    transform: translateX(-50%);
+
+    width: min(850px, 85%);
+
+    padding: 15px 25px;
+
+    border-radius: 18px;
+
+    background: rgba(45, 10, 73, 0.88);
+
+    text-align: center;
+
+    box-shadow:
+        0 0 20px rgba(120, 60, 190, 0.2);
+}
+
+.practice-topic-label {
+    margin-bottom: 5px;
+
+    color: #bfa8d2;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.practice-topic {
+    color: #ffffff;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 21px;
+    font-weight: 600;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   HẾT GIỜ
+   ========================================================= */
+
+.practice-finished {
+    position: absolute;
+
+    left: 50%;
+    top: 560px;
+
+    transform: translateX(-50%);
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+}
+
+.practice-finished-title {
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 48px;
+    font-weight: 400;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 6px #ffffff,
+        0 0 15px rgba(200, 160, 255, 0.8);
+}
+
+.practice-finished-text {
+    margin-top: 10px;
+
+    font-family: "Noto Sans", sans-serif;
+
+    font-size: 19px;
+
+    color: #ffffff;
+}
+
+.practice-finished-btn {
+    width: 230px;
+    height: 58px;
+
+    margin-top: 25px;
+
+    border: none;
+    border-radius: 30px;
+
+    background: #3b0878;
+
+    color: #ffffff;
+
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .practice-sam-container {
+        width: 620px;
+        max-width: 90vw;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .practice-logo {
+        top: 20px;
+        left: 15px;
+        font-size: 30px;
+    }
+
+    .practice-timer-box {
+        top: 20px;
+        right: 15px;
+
+        width: 125px;
+        height: 55px;
+    }
+
+    .practice-clock-icon {
+        font-size: 36px;
+    }
+
+    .practice-timer {
+        font-size: 27px;
+    }
+
+    .practice-sam-container {
+        top: 100px;
+
+        width: 90vw;
+        height: 400px;
+    }
+
+    .practice-ready-text {
+        top: 510px;
+        font-size: 21px;
+    }
+
+    .practice-ready-btn {
+        top: 560px;
+
+        width: 280px;
+        height: 70px;
+
+        font-size: 25px;
+    }
+}
+/* =========================================================
+   PRESENTATION PAGE
+   ========================================================= */
+
+.presentation-page {
+    position: relative;
+
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    overflow: hidden;
+
+    background: #10051d;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.presentation-logo {
+    position: absolute;
+
+    top: 28px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 20;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 43px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.95),
+        0 0 12px rgba(255, 255, 255, 0.9),
+        0 0 22px rgba(210, 190, 255, 0.8),
+        0 0 35px rgba(180, 130, 255, 0.5);
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.presentation-timer-box {
+    position: absolute;
+
+    top: 28px;
+    right: 48px;
+
+    z-index: 20;
+
+    width: 154px;
+    height: 64px;
+
+    border-radius: 21px;
+
+    background: #2d0758;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+}
+
+
+.presentation-clock {
+    color: #321348;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 43px;
+
+    line-height: 1;
+}
+
+
+.presentation-timer {
+    color: #321348;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 35px;
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   KHUNG NHÂN VẬT
+   ========================================================= */
+
+.presentation-sam-box {
+    position: absolute;
+
+    top: 102px;
+    left: 48px;
+
+    width: calc(50% - 55px);
+    height: 462px;
+
+    border-radius: 32px;
+
+    background: #372b46;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.presentation-sam-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block;
+}
+
+
+/* =========================================================
+   CAMERA NGƯỜI DÙNG
+   ========================================================= */
+
+.presentation-camera-box {
+    position: absolute;
+
+    top: 102px;
+    right: 48px;
+
+    width: calc(50% - 55px);
+    height: 462px;
+
+    border-radius: 32px;
+
+    background: #372b46;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.presentation-camera {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transform: scaleX(-1);
+
+    background: #372b46;
+}
+
+
+.camera-error {
+    padding: 30px;
+
+    color: #d8cde0;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 20px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   KHUNG CHỮ CỦA NHÂN VẬT
+   - nhỏ hơn
+   - nằm góc dưới bên trái
+   ========================================================= */
+
+.presentation-sam-text {
+    position: absolute;
+
+    left: 48px;
+    bottom: 22px;
+
+    width: 360px;
+    min-height: 100px;
+    height: auto;
+
+    box-sizing: border-box;
+
+    padding: 14px 20px;
+
+    border-radius: 22px;
+
+    /*
+       !important để ghi đè background inline
+       trong Presentation.jsx
+    */
+    background: #4b2770 !important;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    font-family: "Poppins", sans-serif;
+
+    z-index: 15;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+.sam-listening {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    line-height: 1.15;
+}
+
+
+.sam-instruction {
+    margin-top: 3px;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 17px;
+
+    font-weight: 500;
+
+    line-height: 1.2;
+}
+
+
+.sam-topic {
+    margin-top: 3px;
+
+    max-width: 95%;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 16px;
+
+    font-weight: 500;
+
+    line-height: 1.2;
+
+    color: #eee6f5;
+}
+
+
+/* =========================================================
+   KHUNG SCRIPT CỦA NGƯỜI NÓI
+   - nhỏ hơn
+   - nằm góc dưới bên phải
+   ========================================================= */
+
+.presentation-script-box {
+    position: absolute;
+
+    right: 48px;
+    bottom: 22px;
+
+    width: 360px;
+    height: 100px;
+
+    box-sizing: border-box;
+
+    padding: 15px 20px;
+
+    border-radius: 22px;
+
+    /*
+       !important để ghi đè background inline
+       trong Presentation.jsx
+    */
+    background: #25133b !important;
+
+    overflow-y: auto;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 17px;
+
+    line-height: 1.4;
+
+    color: #ffffff;
+
+    z-index: 15;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+.script-placeholder {
+    color: #cfc3d8;
+
+    font-family: "Poppins", sans-serif;
+}
+
+
+.script-text {
+    color: #ffffff;
+
+    font-family: "Poppins", sans-serif;
+}
+
+
+/* =========================================================
+   HẾT GIỜ
+   ========================================================= */
+
+.presentation-timeup {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 100;
+
+    background: rgba(16, 5, 29, 0.9);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.presentation-timeup-title {
+    font-family: "Paytone One", sans-serif;
+
+    font-size: 60px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 8px #ffffff,
+        0 0 20px rgba(210, 170, 255, 0.8);
+}
+/* =========================================================
+   TRANG CHUẨN BỊ TRẢ LỜI CÂU HỎI TỪ SAM
+   ========================================================= */
+
+.sam-questions-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background: #10051d;
+    color: #ffffff;
+}
+
+.sam-questions-logo {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    font-family: "Poppins", sans-serif;
+    font-size: 43px;
+    font-weight: 900;
+    line-height: 1;
+    color: #ffffff;
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.95),
+        0 0 12px rgba(255, 255, 255, 0.9),
+        0 0 22px rgba(210, 190, 255, 0.8),
+        0 0 35px rgba(180, 130, 255, 0.5);
+}
+
+.sam-questions-content {
+    position: absolute;
+    top: 203px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sam-questions-message {
+    width: 632px;
+    min-height: 199px;
+    box-sizing: border-box;
+    padding: 31px 35px 27px;
+    border-radius: 33px;
+    background: #564a65;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.sam-questions-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-family: "Paytone One", sans-serif;
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 1;
+    color: #ff4d4d;
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.1),
+        0 0 14px rgba(255, 70, 70, 0.35);
+}
+
+.sam-questions-alarm {
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+    font-size: 62px;
+    line-height: 0.9;
+}
+
+.sam-questions-subtitle {
+    margin-top: 22px;
+    font-family: "Baloo 2", "Noto Sans", sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #ffffff;
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.75),
+        0 0 12px rgba(205, 174, 255, 0.35);
+}
+
+.sam-questions-ready-btn {
+    width: 336px;
+    height: 108px;
+    margin-top: 32px;
+    border: none;
+    border-radius: 56px;
+    background: #39096b;
+    color: #ffffff;
+    font-family: "Paytone One", sans-serif;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    text-shadow:
+        0 0 6px #ffffff,
+        0 0 14px rgba(255, 255, 255, 0.75),
+        0 0 24px rgba(205, 174, 255, 0.55);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+    transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.sam-questions-ready-btn:hover {
+    transform: translateY(-2px);
+    background: #430b7d;
+}
+
+@media (max-width: 700px) {
+    .sam-questions-logo {
+        font-size: 34px;
+    }
+
+    .sam-questions-content {
+        top: 130px;
+    }
+
+    .sam-questions-message {
+        width: calc(100vw - 40px);
+        min-height: 210px;
+        padding: 28px 20px;
+    }
+
+    .sam-questions-title {
+        font-size: 28px;
+        gap: 9px;
+    }
+
+    .sam-questions-alarm {
+        font-size: 45px;
+    }
+
+    .sam-questions-subtitle {
+        font-size: 21px;
+    }
+
+    .sam-questions-ready-btn {
+        width: 280px;
+        height: 82px;
+        font-size: 29px;
+    }
+}
+
+/* =========================================================
+   SAM DEBATE
+   ========================================================= */
+
+.presentation-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 720px;
+  overflow: hidden;
+  background: #10051b;
+  color: #fff;
+
+  /* DÙNG FONT GIỐNG HOME / LOGIN */
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.presentation-logo {
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+
+  margin: 0;
+
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(42px, 4vw, 58px);
+  font-weight: 900;
+  line-height: 1;
+
+  white-space: nowrap;
+
+  color: #fff;
+
+  text-shadow:
+    0 0 7px rgba(255,255,255,.95),
+    0 0 18px rgba(183,91,255,.9),
+    0 0 35px rgba(183,91,255,.7);
+}
+
+
+/* =========================================================
+   NÚT CÂU HỎI TIẾP THEO
+   ========================================================= */
+
+.sam-debate-next-button {
+  position: absolute;
+  top: 34px;
+  left: 58px;
+
+  z-index: 60;
+
+  width: 290px;
+  height: 72px;
+
+  border: none;
+  border-radius: 25px;
+
+  background: #fff;
+  color: #321348;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.2);
+
+  transition:
+    transform .2s ease,
+    opacity .2s ease;
+}
+
+.sam-debate-next-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.sam-debate-next-button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.presentation-timer-box {
+  position: absolute;
+  top: 34px;
+  right: 58px;
+
+  z-index: 60;
+
+  width: 220px;
+  height: 78px;
+
+  border-radius: 25px !important;
+
+  background: #35105b !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 0 20px rgba(170,59,255,.18) !important;
+}
+
+.presentation-clock {
+  color: #fff !important;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 36px;
+  line-height: 1;
+}
+
+.presentation-timer {
+  color: #fff !important;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 31px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   KHU VỰC CÂU HỎI
+   ========================================================= */
+
+/*
+   Chừa hẳn một khoảng riêng cho câu hỏi.
+   Câu hỏi dài sẽ tự xuống dòng trong khu vực này.
+*/
+
+.sam-debate-question {
+  position: absolute;
+
+  top: 145px;
+  left: 60px;
+  right: 60px;
+
+  z-index: 40;
+
+  box-sizing: border-box;
+
+  /*
+     Chiều cao khu vực câu hỏi.
+     Không để nội dung đè vào hai khung phía dưới.
+  */
+  min-height: 125px;
+  max-height: 170px;
+
+  padding: 0 5px;
+
+  overflow: hidden;
+
+  font-family: "Poppins", sans-serif;
+
+  white-space: normal;
+}
+
+
+/* =========================================================
+   NHÃN "CÂU HỎI PHẢN BIỆN:"
+   ========================================================= */
+
+.sam-debate-question-label {
+  display: inline;
+
+  margin-right: 8px;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: clamp(23px, 2.2vw, 30px);
+  font-weight: 900;
+
+  line-height: 1.35;
+
+  color: #ffe04f;
+}
+
+
+/* =========================================================
+   NỘI DUNG CÂU HỎI
+   ========================================================= */
+
+.sam-debate-question-text {
+  display: inline;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: clamp(21px, 2vw, 28px);
+  font-weight: 500;
+
+  line-height: 1.45;
+
+  color: #e9e1ef;
+
+  white-space: normal;
+
+  overflow-wrap: break-word;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.sam-debate-main {
+  position: absolute;
+
+  /*
+     Hạ hai khung xuống dưới khu vực câu hỏi.
+  */
+  top: 300px;
+
+  left: 58px;
+  right: 58px;
+
+  height: 360px;
+
+  z-index: 20;
+}
+
+
+/* =========================================================
+   KHUNG SAM
+   ========================================================= */
+
+.presentation-sam-box {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: calc(50% - 22px);
+  height: 360px;
+
+  border-radius: 30px;
+
+  /*
+     MÀU MỚI CHO KHUNG SAM
+  */
+  background: #30233d;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.18);
+}
+
+.presentation-sam-box canvas {
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block;
+}
+
+
+/* =========================================================
+   KHUNG CAMERA
+   ========================================================= */
+
+.presentation-camera-box {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: calc(50% - 22px);
+  height: 360px;
+
+  border-radius: 30px;
+
+  /*
+     MÀU KHUNG CAMERA
+  */
+  background: #24192f;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  border: 1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.18);
+}
+
+.presentation-camera {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transform: scaleX(-1);
+
+  background: #24192f;
+}
+
+.camera-error {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 18px;
+  line-height: 1.5;
+
+  color: #fff;
+}
+
+
+/* =========================================================
+   KHUNG "SAM ĐANG NGHE"
+   ========================================================= */
+
+.presentation-sam-text {
+  position: absolute;
+
+  /*
+     HẠ KHUNG XUỐNG ĐÁY
+  */
+  left: 0;
+  bottom: -125px;
+
+  width: calc(50% - 22px);
+  height: 105px;
+
+  border-radius: 24px;
+
+  /*
+     MÀU KHUNG SAM TEXT
+  */
+  background: #463252 !important;
+
+  box-sizing: border-box;
+
+  padding: 12px 25px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.15);
+}
+
+.sam-listening {
+  margin: 0;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: clamp(22px, 2vw, 29px);
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  color: #fff;
+}
+
+.sam-instruction {
+  margin-top: 5px;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: clamp(16px, 1.5vw, 21px);
+  font-weight: 400;
+
+  line-height: 1.3;
+
+  color: #ddd4e4;
+}
+
+
+/* =========================================================
+   Ô SCRIPT / LỜI NÓI
+   ========================================================= */
+
+.presentation-script-box {
+  position: absolute;
+
+  /*
+     ĐẨY SCRIPT XUỐNG ĐÁY KHUNG CAMERA
+  */
+  right: 0;
+  bottom: -125px;
+
+  width: calc(50% - 22px);
+  height: 105px;
+
+  border-radius: 24px;
+
+  /*
+     MÀU KHUNG SCRIPT
+  */
+  background: #463252 !important;
+
+  box-sizing: border-box;
+
+  padding: 18px 25px;
+
+  display: flex;
+  align-items: flex-start;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 19px;
+  font-weight: 400;
+
+  line-height: 1.5;
+
+  color: #fff;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.15);
+}
+
+.script-placeholder {
+  width: 100%;
+
+  color: #cfc4d6;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 19px;
+}
+
+.script-text {
+  width: 100%;
+
+  color: #fff;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 19px;
+
+  line-height: 1.5;
+
+  overflow-wrap: break-word;
+}
+
+
+/* =========================================================
+   CẢNH BÁO SPEECH
+   ========================================================= */
+
+.sam-speech-warning {
+  position: fixed;
+
+  left: 50%;
+  bottom: 190px;
+
+  transform: translateX(-50%);
+
+  z-index: 100;
+
+  padding: 10px 18px;
+
+  border-radius: 12px;
+
+  background: rgba(190,50,80,.9);
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 14px;
+
+  color: #fff;
+}
+
+
+/* =========================================================
+   MODAL XÁC NHẬN
+   ========================================================= */
+
+.sam-debate-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 200;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15,5,25,.7);
+
+  backdrop-filter: blur(5px);
+}
+
+.sam-debate-modal {
+  width: min(520px, 90vw);
+
+  padding: 35px;
+
+  border-radius: 28px;
+
+  background: #fff;
+
+  color: #321348;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.35);
+
+  box-sizing: border-box;
+}
+
+.sam-debate-modal-title {
+  font-family: "Poppins", sans-serif;
+
+  font-size: 25px;
+  font-weight: 800;
+
+  line-height: 1.35;
+}
+
+.sam-debate-modal-text {
+  margin-top: 12px;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 17px;
+
+  line-height: 1.5;
+
+  color: #6c6072;
+}
+
+.sam-debate-modal-actions {
+  margin-top: 25px;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+}
+
+.sam-debate-back-btn,
+.sam-debate-confirm-btn {
+  min-width: 140px;
+  height: 50px;
+
+  border: none;
+  border-radius: 15px;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+.sam-debate-back-btn {
+  background: #eee8f1;
+  color: #321348;
+}
+
+.sam-debate-confirm-btn {
+  background: #321348;
+  color: #fff;
+}
+/* =========================================================
+   HẾT GIỜ
+   ========================================================= */
+
+.presentation-timeup {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 150;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15,5,25,.72);
+
+  backdrop-filter: blur(5px);
+}
+
+.presentation-timeup-title {
+  padding: 35px 60px;
+
+  border-radius: 28px;
+
+  background: #fff;
+
+  color: #321348;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 42px;
+  font-weight: 900;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.sam-debate-loading {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  color: #fff;
+
+  white-space: nowrap;
+  width: max-content;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .presentation-logo {
+    font-size: 48px;
+  }
+
+  .sam-debate-next-button {
+    left: 35px;
+    width: 250px;
+  }
+
+  .presentation-timer-box {
+    right: 35px;
+  }
+
+  .sam-debate-question {
+    left: 35px;
+    right: 35px;
+  }
+
+  .sam-debate-question-label {
+    font-size: 23px;
+  }
+
+  .sam-debate-question-text {
+    font-size: 22px;
+  }
+
+  .presentation-sam-box,
+  .presentation-camera-box {
+    width: calc(50% - 48px);
+  }
+
+  .presentation-sam-box,
+  .presentation-sam-text {
+    left: 35px;
+  }
+
+  .presentation-camera-box,
+  .presentation-script-box {
+    right: 35px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 750px) {
+
+  .presentation-page {
+    height: auto;
+    min-height: 100vh;
+
+    overflow-y: auto;
+
+    padding-bottom: 30px;
+  }
+
+  .presentation-logo {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    transform: none;
+
+    padding-top: 20px;
+
+    text-align: center;
+
+    font-size: 36px;
+  }
+
+  .sam-debate-next-button {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    display: block;
+
+    width: calc(100% - 40px);
+
+    height: 60px;
+
+    margin: 20px auto 0;
+
+    font-size: 17px;
+  }
+
+  .presentation-timer-box {
+    position: relative;
+
+    top: auto;
+    right: auto;
+
+    margin: 15px auto 0;
+
+    width: 170px;
+    height: 58px;
+  }
+
+  .sam-debate-question {
+    position: relative;
+
+    top: auto;
+    left: auto;
+    right: auto;
+
+    margin: 20px;
+  }
+
+  .sam-debate-question-label {
+    font-size: 19px;
+  }
+
+  .sam-debate-question-text {
+    font-size: 18px;
+  }
+
+  .presentation-sam-box,
+  .presentation-camera-box,
+  .presentation-sam-text,
+  .presentation-script-box {
+    position: relative;
+
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+
+    width: calc(100% - 40px);
+
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .presentation-sam-box {
+    height: 300px;
+
+    margin-top: 20px;
+  }
+
+  .presentation-camera-box {
+    height: 280px;
+
+    margin-top: 15px;
+  }
+
+  .presentation-sam-text {
+    height: 115px;
+
+    margin-top: 15px;
+  }
+
+  .presentation-script-box {
+    min-height: 115px;
+    height: auto;
+
+    margin-top: 15px;
+  }
+}
+/* =========================================================
+   SAM DEBATE - CHỈNH KHUNG NHỎ + FONT
+   ========================================================= */
+
+/* Dùng font giống Home / Login */
+.sam-debate-page,
+.sam-debate-page * {
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* =========================================================
+   KHUNG NHÂN VẬT SAM
+   ========================================================= */
+
+.sam-debate-page .presentation-sam-box {
+  background: #2f2340 !important;
+}
+
+
+/* =========================================================
+   KHUNG CAMERA
+   ========================================================= */
+
+.sam-debate-page .presentation-camera-box {
+  background: #2f2340 !important;
+}
+
+
+/* =========================================================
+   KHUNG "SAM ĐANG NGHE"
+   → nhỏ lại
+   → góc dưới bên trái của khung SAM
+   ========================================================= */
+
+.sam-debate-page .presentation-sam-text {
+  left: 25px;
+  right: auto;
+  bottom: 22px;
+
+  width: calc(100% - 50px);
+  height: 105px;
+
+  padding: 12px 20px;
+
+  border-radius: 22px;
+
+  background: #493653 !important;
+
+  box-sizing: border-box;
+
+  z-index: 10;
+}
+
+
+/* Chữ SAM */
+.sam-debate-page .sam-listening {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(22px, 1.8vw, 28px);
+  font-weight: 800;
+}
+
+
+/* Dòng hướng dẫn */
+.sam-debate-page .sam-instruction {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(15px, 1.3vw, 19px);
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   KHUNG SCRIPT
+   → nhỏ lại
+   → góc dưới bên phải của khung CAMERA
+   ========================================================= */
+
+.sam-debate-page .presentation-script-box {
+  left: auto;
+  right: 25px;
+  bottom: 22px;
+
+  width: calc(100% - 50px);
+  height: 105px;
+
+  padding: 18px 22px;
+
+  border-radius: 22px;
+
+  background: #493653 !important;
+
+  box-sizing: border-box;
+
+  z-index: 10;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+
+/* Chữ đang chạy */
+.sam-debate-page .script-text {
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+
+/* Chữ placeholder */
+.sam-debate-page .script-placeholder {
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+}
+/* =========================================================
+   PRESENTATION - FINAL V2
+   ========================================================= */
+
+
+/* =========================================================
+   KHUNG SAM
+   ========================================================= */
+
+.presentation-page .presentation-sam-box {
+    position: absolute !important;
+
+    top: 102px !important;
+    left: 48px !important;
+
+    width: calc(50% - 55px) !important;
+    height: 462px !important;
+
+    border-radius: 32px !important;
+
+    background: #372b46 !important;
+
+    overflow: hidden !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 5 !important;
+}
+
+
+/* =========================================================
+   KHUNG CAMERA
+   ========================================================= */
+
+.presentation-page .presentation-camera-box {
+    position: absolute !important;
+
+    top: 102px !important;
+    right: 48px !important;
+
+    width: calc(50% - 55px) !important;
+    height: 462px !important;
+
+    border-radius: 32px !important;
+
+    background: #372b46 !important;
+
+    overflow: hidden !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 5 !important;
+}
+
+
+/* =========================================================
+   VIDEO
+   ========================================================= */
+
+.presentation-page .presentation-camera {
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover !important;
+
+    display: block !important;
+
+    transform: scaleX(-1) !important;
+
+    background: #372b46 !important;
+}
+
+
+/* =========================================================
+   KHUNG CHỮ SAM
+   NGAY BÊN DƯỚI KHUNG SAM
+   ========================================================= */
+
+.presentation-page .presentation-sam-text {
+    position: absolute !important;
+
+    left: 48px !important;
+
+    /*
+       Khung SAM bắt đầu 102px
+       cao 462px
+       => kết thúc 564px
+
+       Khung chữ bắt đầu 576px
+       => cách nhau chỉ 12px
+    */
+    top: 576px !important;
+
+    bottom: auto !important;
+
+    width: 360px !important;
+
+    /*
+       Cho phép tự cao theo nội dung
+    */
+    height: auto !important;
+
+    min-height: 112px !important;
+
+    box-sizing: border-box !important;
+
+    padding: 14px 20px !important;
+
+    border-radius: 22px !important;
+
+    background: #4b2770 !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    text-align: center !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    z-index: 20 !important;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.28) !important;
+
+    overflow: visible !important;
+}
+
+
+/* =========================================================
+   SAM ĐANG NGHE
+   ========================================================= */
+
+.presentation-page .presentation-sam-text .sam-listening {
+    margin: 0 !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 22px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1.2 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BẠN HÃY TRÌNH BÀY
+   ========================================================= */
+
+.presentation-page .presentation-sam-text .sam-instruction {
+    margin-top: 4px !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 17px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1.25 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CHỦ ĐỀ
+   QUAN TRỌNG:
+   KHÔNG CẮT CÂU
+   KHÔNG ...
+   TỰ XUỐNG DÒNG
+   ========================================================= */
+
+.presentation-page .presentation-sam-text .sam-topic {
+    margin-top: 4px !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 16px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1.35 !important;
+
+    color: #eee6f5 !important;
+
+    /*
+       Cho câu hỏi xuống dòng
+    */
+    white-space: normal !important;
+
+    /*
+       Không cắt chữ
+    */
+    overflow: visible !important;
+
+    text-overflow: clip !important;
+
+    /*
+       Cho phép ngắt dòng khi câu dài
+    */
+    overflow-wrap: anywhere !important;
+
+    word-break: normal !important;
+}
+
+
+/* =========================================================
+   KHUNG SCRIPT NGƯỜI NÓI
+   NGAY BÊN DƯỚI CAMERA
+   ========================================================= */
+
+.presentation-page .presentation-script-box {
+    position: absolute !important;
+
+    right: 48px !important;
+
+    top: 576px !important;
+
+    bottom: auto !important;
+
+    width: 360px !important;
+
+    height: 112px !important;
+
+    box-sizing: border-box !important;
+
+    padding: 16px 20px !important;
+
+    border-radius: 22px !important;
+
+    background: #26143d !important;
+
+    overflow-y: auto !important;
+
+    overflow-x: hidden !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.4 !important;
+
+    color: #ffffff !important;
+
+    z-index: 20 !important;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.28) !important;
+}
+
+
+/* =========================================================
+   SCRIPT PLACEHOLDER
+   ========================================================= */
+
+.presentation-page .presentation-script-box .script-placeholder {
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.4 !important;
+
+    color: #cfc4d8 !important;
+}
+
+
+/* =========================================================
+   SCRIPT THẬT
+   ========================================================= */
+
+.presentation-page .presentation-script-box .script-text {
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.4 !important;
+
+    color: #ffffff !important;
+
+    white-space: normal !important;
+
+    overflow-wrap: anywhere !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .presentation-page .presentation-sam-box,
+    .presentation-page .presentation-camera-box {
+        height: 400px !important;
+    }
+
+    .presentation-page .presentation-sam-text,
+    .presentation-page .presentation-script-box {
+        top: 514px !important;
+    }
+
+    .presentation-page .presentation-sam-text {
+        left: 30px !important;
+    }
+
+    .presentation-page .presentation-script-box {
+        right: 30px !important;
+    }
+}
+
+
+@media (max-width: 750px) {
+
+    .presentation-page .presentation-sam-box {
+        top: 90px !important;
+        left: 20px !important;
+
+        width: calc(50% - 25px) !important;
+
+        height: 360px !important;
+    }
+
+    .presentation-page .presentation-camera-box {
+        top: 90px !important;
+        right: 20px !important;
+
+        width: calc(50% - 25px) !important;
+
+        height: 360px !important;
+    }
+
+    .presentation-page .presentation-sam-text {
+        left: 20px !important;
+        top: 462px !important;
+
+        width: calc(50% - 30px) !important;
+
+        min-height: 105px !important;
+    }
+
+    .presentation-page .presentation-script-box {
+        right: 20px !important;
+        top: 462px !important;
+
+        width: calc(50% - 30px) !important;
+
+        height: 105px !important;
+    }
+
+    .presentation-page .presentation-sam-text .sam-listening {
+        font-size: 18px !important;
+    }
+
+    .presentation-page .presentation-sam-text .sam-instruction,
+    .presentation-page .presentation-sam-text .sam-topic,
+    .presentation-page .presentation-script-box,
+    .presentation-page .presentation-script-box .script-placeholder,
+    .presentation-page .presentation-script-box .script-text {
+        font-size: 14px !important;
+    }
+}
+/* =========================================================
+   THU NHỎ ĐỒNG HỒ TRANG PRESENTATION
+   ========================================================= */
+
+.presentation-page .presentation-timer-box {
+    position: absolute !important;
+
+    top: 28px !important;
+    right: 48px !important;
+
+    width: 125px !important;
+    height: 52px !important;
+
+    border-radius: 18px !important;
+
+    background: #ffffff !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 3px !important;
+
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+
+    z-index: 100 !important;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.20) !important;
+}
+
+
+/* ICON ĐỒNG HỒ */
+
+.presentation-page .presentation-clock {
+    font-family: Arial, sans-serif !important;
+
+    font-size: 28px !important;
+
+    line-height: 1 !important;
+
+    color: #321348 !important;
+}
+
+
+/* CHỮ SỐ THỜI GIAN */
+
+.presentation-page .presentation-timer {
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 27px !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+
+    color: #321348 !important;
+
+    letter-spacing: -0.5px !important;
+}
+/* =========================================================
+   SAM DEBATE - BỐ CỤC FINAL
+   ========================================================= */
+
+
+/* =========================================================
+   TOÀN TRANG
+   ========================================================= */
+
+.presentation-page {
+    position: relative !important;
+
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+
+    overflow: hidden !important;
+
+    background: #10051d !important;
+
+    color: #ffffff !important;
+
+    font-family: "Poppins", sans-serif !important;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.presentation-page .presentation-logo {
+    position: absolute !important;
+
+    top: 28px !important;
+    left: 50% !important;
+
+    transform: translateX(-50%) !important;
+
+    z-index: 100 !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 43px !important;
+    font-weight: 900 !important;
+
+    line-height: 1 !important;
+
+    color: #ffffff !important;
+
+    text-shadow:
+        0 0 5px rgba(255,255,255,0.95),
+        0 0 12px rgba(255,255,255,0.9),
+        0 0 22px rgba(210,190,255,0.8),
+        0 0 35px rgba(180,130,255,0.5) !important;
+}
+
+
+/* =========================================================
+   ĐỒNG HỒ
+   ========================================================= */
+
+.presentation-page .presentation-timer-box {
+    position: absolute !important;
+
+    top: 28px !important;
+    right: 48px !important;
+
+    width: 125px !important;
+    height: 52px !important;
+
+    border-radius: 18px !important;
+
+    background: #ffffff !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 3px !important;
+
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+
+    z-index: 100 !important;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.2) !important;
+}
+
+
+.presentation-page .presentation-clock {
+    font-family: Arial, sans-serif !important;
+
+    font-size: 28px !important;
+
+    line-height: 1 !important;
+
+    color: #321348 !important;
+}
+
+
+.presentation-page .presentation-timer {
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 27px !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+
+    color: #321348 !important;
+
+    letter-spacing: -0.5px !important;
+}
+
+
+/* =========================================================
+   KHUNG CÂU HỎI PHẢN BIỆN
+   ========================================================= */
+
+.presentation-page .sam-debate-question {
+    position: absolute !important;
+
+    /*
+       Nằm dưới logo,
+       phía trên SAM + CAMERA
+    */
+    top: 105px !important;
+
+    left: 48px !important;
+    right: 48px !important;
+
+    width: auto !important;
+
+    min-height: 90px !important;
+
+    box-sizing: border-box !important;
+
+    padding: 16px 28px !important;
+
+    border-radius: 24px !important;
+
+    background: #3b2057 !important;
+
+    border: 1px solid rgba(255,255,255,0.08) !important;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.25) !important;
+
+    z-index: 30 !important;
+
+    text-align: center !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    /*
+       QUAN TRỌNG:
+       câu hỏi dài thì tự xuống dòng
+    */
+    white-space: normal !important;
+
+    overflow: visible !important;
+}
+
+
+/* =========================================================
+   NHÃN "CÂU HỎI PHẢN BIỆN"
+   ========================================================= */
+
+.presentation-page .sam-debate-question-label {
+    margin: 0 0 5px 0 !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 17px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1.2 !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   NỘI DUNG CÂU HỎI
+   ========================================================= */
+
+.presentation-page .sam-debate-question-text {
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 21px !important;
+
+    font-weight: 500 !important;
+
+    line-height: 1.35 !important;
+
+    color: #eee7f5 !important;
+
+    /*
+       Không cắt câu
+    */
+    white-space: normal !important;
+
+    overflow: visible !important;
+
+    text-overflow: clip !important;
+
+    overflow-wrap: anywhere !important;
+
+    word-break: normal !important;
+}
+
+
+/* =========================================================
+   KHUNG SAM
+   ========================================================= */
+
+.presentation-page .presentation-sam-box {
+    position: absolute !important;
+
+    top: 215px !important;
+    left: 48px !important;
+
+    width: calc(50% - 55px) !important;
+
+    /*
+       nhỏ hơn một chút vì đã chừa
+       khu vực câu hỏi phía trên
+    */
+    height: 360px !important;
+
+    border-radius: 30px !important;
+
+    background: #372b46 !important;
+
+    overflow: hidden !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 5 !important;
+}
+
+
+/* =========================================================
+   KHUNG CAMERA
+   ========================================================= */
+
+.presentation-page .presentation-camera-box {
+    position: absolute !important;
+
+    top: 215px !important;
+    right: 48px !important;
+
+    width: calc(50% - 55px) !important;
+
+    height: 360px !important;
+
+    border-radius: 30px !important;
+
+    background: #372b46 !important;
+
+    overflow: hidden !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 5 !important;
+}
+
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+.presentation-page .presentation-camera {
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover !important;
+
+    display: block !important;
+
+    transform: scaleX(-1) !important;
+}
+
+
+/* =========================================================
+   KHUNG CHỮ SAM
+   ========================================================= */
+
+.presentation-page .presentation-sam-text {
+    position: absolute !important;
+
+    left: 48px !important;
+
+    top: 587px !important;
+
+    bottom: auto !important;
+
+    width: 360px !important;
+
+    min-height: 105px !important;
+
+    height: auto !important;
+
+    box-sizing: border-box !important;
+
+    padding: 14px 20px !important;
+
+    border-radius: 22px !important;
+
+    background: #4b2770 !important;
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    text-align: center !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    z-index: 20 !important;
+
+    overflow: visible !important;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.28) !important;
+}
+
+
+/* =========================================================
+   SAM ĐANG NGHE
+   ========================================================= */
+
+.presentation-page .presentation-sam-text .sam-listening {
+    margin: 0 !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 21px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1.2 !important;
+
+    color: #ffffff !important;
+}
+
+
+.presentation-page .presentation-sam-text .sam-instruction {
+    margin-top: 4px !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 16px !important;
+
+    font-weight: 500 !important;
+
+    color: #ffffff !important;
+}
+
+
+.presentation-page .presentation-sam-text .sam-topic {
+    margin-top: 4px !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 15px !important;
+
+    line-height: 1.35 !important;
+
+    color: #e7dcef !important;
+
+    white-space: normal !important;
+
+    overflow-wrap: anywhere !important;
+}
+
+
+/* =========================================================
+   SCRIPT NGƯỜI NÓI
+   ========================================================= */
+
+.presentation-page .presentation-script-box {
+    position: absolute !important;
+
+    right: 48px !important;
+
+    top: 587px !important;
+
+    bottom: auto !important;
+
+    width: 360px !important;
+
+    height: 105px !important;
+
+    box-sizing: border-box !important;
+
+    padding: 15px 20px !important;
+
+    border-radius: 22px !important;
+
+    background: #26143d !important;
+
+    overflow-y: auto !important;
+
+    overflow-x: hidden !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.4 !important;
+
+    color: #ffffff !important;
+
+    z-index: 20 !important;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.28) !important;
+}
+
+
+.presentation-page .presentation-script-box .script-placeholder,
+.presentation-page .presentation-script-box .script-text {
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.4 !important;
+
+    white-space: normal !important;
+
+    overflow-wrap: anywhere !important;
+}
+/* =========================================================
+   SAM DEBATE - NEW LAYOUT
+   ========================================================= */
+
+.sam-debate-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    overflow: hidden;
+
+    background: #10051d;
+    color: #ffffff;
+
+    font-family: "Poppins", sans-serif;
+}
+
+
+/* =========================
+   LOGO
+   ========================= */
+
+.sam-debate-logo {
+    position: absolute;
+
+    top: 28px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 100;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 43px;
+    font-weight: 900;
+
+    color: #ffffff;
+
+    line-height: 1;
+
+    text-shadow:
+        0 0 5px rgba(255,255,255,0.95),
+        0 0 12px rgba(255,255,255,0.9),
+        0 0 22px rgba(210,190,255,0.8),
+        0 0 35px rgba(180,130,255,0.5);
+}
+
+
+/* =========================
+   TIMER
+   ========================= */
+
+.sam-debate-timer {
+    position: absolute;
+
+    top: 28px;
+    right: 48px;
+
+    width: 125px;
+    height: 52px;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    z-index: 100;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.2);
+}
+
+.sam-debate-clock {
+    font-family: Arial, sans-serif;
+
+    font-size: 28px;
+
+    color: #321348;
+}
+
+.sam-debate-time {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 27px;
+    font-weight: 700;
+
+    color: #321348;
+}
+
+
+/* =========================
+   NÚT TIẾP THEO
+   ========================= */
+
+.sam-debate-next-button {
+    position: absolute;
+
+    top: 28px;
+    left: 28px;
+
+    width: 210px;
+    height: 52px;
+
+    border: none;
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    color: #321348;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    z-index: 100;
+
+    box-shadow:
+        0 7px 20px rgba(0,0,0,0.25);
+}
+
+
+/* =========================
+   KHUNG CÂU HỎI
+   ========================= */
+
+.sam-debate-question {
+    position: absolute;
+
+    top: 105px;
+    left: 48px;
+    right: 48px;
+
+    min-height: 105px;
+
+    box-sizing: border-box;
+
+    padding: 16px 28px;
+
+    border-radius: 24px;
+
+    background: #3b2057;
+
+    text-align: center;
+
+    z-index: 30;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.25);
+}
+
+.sam-debate-question-label {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 17px;
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    color: #ffffff;
+
+    margin-bottom: 6px;
+}
+
+.sam-debate-question-text {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 20px;
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    color: #eee7f5;
+
+    white-space: normal;
+
+    overflow: visible;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   2 KHUNG CHÍNH
+   ========================= */
+
+.sam-debate-main {
+    position: absolute;
+
+    top: 235px;
+    left: 48px;
+    right: 48px;
+
+    height: 390px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 40px;
+}
+
+
+/* =========================
+   SAM
+   ========================= */
+
+.sam-debate-character {
+    position: relative;
+
+    height: 390px;
+
+    border-radius: 30px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #2b1c38,
+            #21152d
+        );
+
+    border:
+        1px solid rgba(210,176,255,0.12);
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.22);
+}
+
+.sam-debate-character canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* =========================
+   CHỮ SAM
+   ========================= */
+
+.sam-debate-character-text {
+    position: absolute;
+
+    left: 28px;
+    bottom: 22px;
+
+    width: 250px;
+    min-height: 82px;
+
+    box-sizing: border-box;
+
+    padding: 12px 16px;
+
+    border-radius: 19px;
+
+    background: #4b2770;
+
+    text-align: center;
+
+    z-index: 10;
+
+    box-shadow:
+        0 7px 20px rgba(0,0,0,0.25);
+}
+
+.sam-debate-character-text .sam-listening {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    color: #ffffff;
+}
+
+.sam-debate-character-text .sam-instruction {
+    margin-top: 3px;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 13px;
+    line-height: 1.3;
+
+    color: #e8def0;
+}
+
+
+/* =========================
+   CAMERA
+   ========================= */
+
+.sam-debate-camera {
+    position: relative;
+
+    height: 390px;
+
+    border-radius: 30px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #21152d,
+            #191022
+        );
+
+    border:
+        1px solid rgba(210,176,255,0.12);
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.22);
+}
+
+.sam-debate-video {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transform: scaleX(-1);
+}
+
+
+/* =========================
+   KHUNG TRẢ LỜI
+   ========================= */
+
+.sam-debate-answer {
+    position: absolute;
+
+    right: 28px;
+    bottom: 22px;
+
+    width: 250px;
+    min-height: 82px;
+    max-height: 105px;
+
+    box-sizing: border-box;
+
+    padding: 12px 16px;
+
+    border-radius: 19px;
+
+    background: #26143d;
+
+    border:
+        1px solid rgba(220,190,255,0.14);
+
+    overflow-y: auto;
+
+    z-index: 10;
+
+    box-shadow:
+        0 7px 20px rgba(0,0,0,0.25);
+}
+
+.sam-debate-answer-text {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 14px;
+    line-height: 1.4;
+
+    color: #ffffff;
+
+    white-space: normal;
+
+    overflow-wrap: anywhere;
+}
+
+.sam-debate-answer-placeholder {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 14px;
+
+    color: #cfc4d8;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 900px) {
+
+    .sam-debate-main {
+        left: 25px;
+        right: 25px;
+
+        gap: 20px;
+    }
+
+    .sam-debate-question {
+        left: 25px;
+        right: 25px;
+    }
+
+    .sam-debate-character-text {
+        left: 18px;
+        width: 220px;
+    }
+
+    .sam-debate-answer {
+        right: 18px;
+        width: 220px;
+    }
+}
+/* =========================================================
+   SAM DEBATE - FINAL OVERRIDE
+   DÁN CUỐI APP.CSS
+   ========================================================= */
+
+.sam-debate-page {
+  position: relative !important;
+
+  width: 100% !important;
+  height: 100vh !important;
+  min-height: 700px !important;
+
+  box-sizing: border-box !important;
+
+  overflow: hidden !important;
+
+  background: #10051d !important;
+
+  color: #ffffff !important;
+
+  font-family: "Poppins", sans-serif !important;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.sam-debate-logo {
+  position: absolute !important;
+
+  top: 25px !important;
+  left: 50% !important;
+
+  transform: translateX(-50%) !important;
+
+  z-index: 50 !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 28px !important;
+  font-weight: 800 !important;
+
+  letter-spacing: 1px !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.sam-debate-timer {
+  position: absolute !important;
+
+  top: 20px !important;
+  right: 35px !important;
+
+  z-index: 50 !important;
+
+  width: 105px !important;
+  height: 42px !important;
+
+  border-radius: 14px !important;
+
+  background: #2d0758 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 5px !important;
+
+  box-sizing: border-box !important;
+
+  font-family: "Poppins", sans-serif !important;
+}
+
+
+.sam-debate-clock {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 21px !important;
+
+  color: #ffffff !important;
+}
+
+
+.sam-debate-time {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 20px !important;
+  font-weight: 700 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   NÚT CÂU HỎI TIẾP THEO
+   ========================================================= */
+
+.sam-debate-next-button {
+  position: absolute !important;
+
+  top: 88px !important;
+  right: 35px !important;
+
+  z-index: 40 !important;
+
+  width: 263px !important;
+  height: 66px !important;
+
+  border: none !important;
+
+  border-radius: 22px !important;
+
+  background: #ffffff !important;
+
+  color: #321348 !important;
+
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 20px !important;
+  font-weight: 400 !important;
+
+  white-space: nowrap !important;
+
+  cursor: pointer !important;
+
+  box-sizing: border-box !important;
+
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease !important;
+}
+
+
+.sam-debate-next-button:hover {
+  transform: translateY(-2px) !important;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+
+/* =========================================================
+   KHUNG CÂU HỎI
+   ========================================================= */
+
+.sam-debate-question {
+  position: absolute !important;
+
+  top: 175px !important;
+  left: 50% !important;
+
+  transform: translateX(-50%) !important;
+
+  width: calc(100% - 140px) !important;
+
+  min-height: 85px !important;
+
+  max-height: 150px !important;
+
+  padding: 16px 24px !important;
+
+  box-sizing: border-box !important;
+
+  border-radius: 22px !important;
+
+  background: #43235e !important;
+
+  border: 1px solid rgba(220, 190, 255, 0.12) !important;
+
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  justify-content: center !important;
+
+  gap: 5px !important;
+
+  overflow: hidden !important;
+
+  font-family: "Poppins", sans-serif !important;
+}
+
+
+/* =========================================================
+   TIÊU ĐỀ CÂU HỎI
+   ========================================================= */
+
+.sam-debate-question-label {
+  display: block !important;
+
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 20px !important;
+
+  font-weight: 400 !important;
+
+  line-height: 1.2 !important;
+
+  color: #ffffff !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* =========================================================
+   NỘI DUNG CÂU HỎI
+   ========================================================= */
+
+.sam-debate-question-text {
+  display: block !important;
+
+  width: 100% !important;
+
+  box-sizing: border-box !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 17px !important;
+
+  font-weight: 600 !important;
+
+  line-height: 1.4 !important;
+
+  color: #ffffff !important;
+
+  white-space: normal !important;
+
+  overflow-wrap: break-word !important;
+
+  word-break: normal !important;
+
+  overflow: hidden !important;
+}
+
+
+/* =========================================================
+   2 KHUNG CHÍNH
+   ========================================================= */
+
+.sam-debate-main {
+  position: absolute !important;
+
+  top: 280px !important;
+  left: 70px !important;
+
+  width: calc(100% - 140px) !important;
+
+  height: calc(100vh - 315px) !important;
+
+  display: grid !important;
+
+  grid-template-columns: 1fr 1fr !important;
+
+  gap: 40px !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   KHUNG SAM
+   ========================================================= */
+
+.sam-debate-character {
+  position: relative !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  border-radius: 28px !important;
+
+  overflow: hidden !important;
+
+  background:
+    linear-gradient(
+      145deg,
+      #2b1c38,
+      #21152d
+    ) !important;
+
+  border:
+    1px solid rgba(210, 176, 255, 0.12) !important;
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.22) !important;
+}
+
+
+/* =========================================================
+   CANVAS SAM
+   ========================================================= */
+
+.sam-debate-character canvas {
+  position: absolute !important;
+
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* =========================================================
+   Ô CHỮ SAM
+   ========================================================= */
+
+.sam-debate-character-text {
+  position: absolute !important;
+
+  left: 20px !important;
+  bottom: 18px !important;
+
+  width: calc(100% - 40px) !important;
+
+  min-height: 72px !important;
+
+  padding: 10px 16px !important;
+
+  box-sizing: border-box !important;
+
+  border-radius: 16px !important;
+
+  background: rgba(67, 35, 94, 0.95) !important;
+
+  border:
+    1px solid rgba(220, 190, 255, 0.16) !important;
+
+  text-align: center !important;
+
+  z-index: 10 !important;
+
+  font-family: "Poppins", sans-serif !important;
+}
+
+
+.sam-listening {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 17px !important;
+
+  font-weight: 700 !important;
+
+  color: #ffffff !important;
+}
+
+
+.sam-instruction {
+  margin-top: 3px !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 13px !important;
+
+  font-weight: 500 !important;
+
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+.sam-debate-camera {
+  position: relative !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  min-width: 0 !important;
+  min-height: 0 !important;
+
+  border-radius: 28px !important;
+
+  overflow: hidden !important;
+
+  background:
+    linear-gradient(
+      145deg,
+      #21152d,
+      #191022
+    ) !important;
+
+  border:
+    1px solid rgba(210, 176, 255, 0.12) !important;
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.22) !important;
+}
+
+
+/* =========================================================
+   VIDEO
+   ========================================================= */
+
+.sam-debate-video {
+  position: absolute !important;
+
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+
+  transform: scaleX(-1) !important;
+}
+
+
+/* =========================================================
+   CAMERA ERROR
+   ========================================================= */
+
+.sam-debate-camera .camera-error {
+  position: absolute !important;
+
+  top: 50% !important;
+  left: 50% !important;
+
+  transform: translate(-50%, -50%) !important;
+
+  width: 100% !important;
+
+  text-align: center !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 17px !important;
+  font-weight: 600 !important;
+
+  line-height: 1.6 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   Ô TRẢ LỜI
+   ========================================================= */
+
+.sam-debate-answer {
+  position: absolute !important;
+
+  left: 20px !important;
+  right: 20px !important;
+  bottom: 18px !important;
+
+  height: 82px !important;
+
+  padding: 12px 16px !important;
+
+  box-sizing: border-box !important;
+
+  border-radius: 16px !important;
+
+  background: rgba(45, 7, 88, 0.94) !important;
+
+  border:
+    1px solid rgba(220, 190, 255, 0.16) !important;
+
+  backdrop-filter: blur(8px) !important;
+
+  overflow-y: auto !important;
+
+  z-index: 10 !important;
+
+  font-family: "Poppins", sans-serif !important;
+}
+
+
+.sam-debate-answer-text {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 15px !important;
+
+  font-weight: 500 !important;
+
+  line-height: 1.45 !important;
+
+  color: #ffffff !important;
+}
+
+
+.sam-debate-answer-placeholder {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 15px !important;
+
+  font-weight: 500 !important;
+
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+
+/* =========================================================
+   SPEECH WARNING
+   ========================================================= */
+
+.sam-speech-warning {
+  position: fixed !important;
+
+  left: 50% !important;
+  bottom: 15px !important;
+
+  transform: translateX(-50%) !important;
+
+  z-index: 100 !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 13px !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.sam-debate-modal-overlay {
+  position: fixed !important;
+
+  inset: 0 !important;
+
+  z-index: 200 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: rgba(10, 4, 18, 0.72) !important;
+
+  backdrop-filter: blur(5px) !important;
+}
+
+
+.sam-debate-modal {
+  width: 440px !important;
+
+  max-width: calc(100% - 40px) !important;
+
+  padding: 30px !important;
+
+  box-sizing: border-box !important;
+
+  border-radius: 24px !important;
+
+  background: #2d0758 !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  text-align: center !important;
+}
+
+
+.sam-debate-modal-title {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 21px !important;
+
+  font-weight: 700 !important;
+
+  color: #ffffff !important;
+
+  line-height: 1.4 !important;
+}
+
+
+.sam-debate-modal-text {
+  margin-top: 10px !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 14px !important;
+
+  color: rgba(255, 255, 255, 0.75) !important;
+
+  line-height: 1.5 !important;
+}
+
+
+.sam-debate-modal-actions {
+  display: flex !important;
+
+  justify-content: center !important;
+
+  gap: 12px !important;
+
+  margin-top: 25px !important;
+}
+
+
+.sam-debate-back-btn,
+.sam-debate-confirm-btn {
+  min-width: 130px !important;
+
+  height: 45px !important;
+
+  border: none !important;
+
+  border-radius: 13px !important;
+
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 14px !important;
+
+  cursor: pointer !important;
+}
+
+
+.sam-debate-back-btn {
+  background: #ffffff !important;
+
+  color: #321348 !important;
+}
+
+
+.sam-debate-confirm-btn {
+  background: #8d42c7 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   HẾT GIỜ
+   ========================================================= */
+
+.presentation-timeup {
+  position: fixed !important;
+
+  inset: 0 !important;
+
+  z-index: 300 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  background: rgba(10, 4, 18, 0.78) !important;
+}
+
+
+.presentation-timeup-title {
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 58px !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.sam-debate-loading {
+  position: absolute !important;
+
+  top: 50% !important;
+  left: 50% !important;
+
+  transform: translate(-50%, -50%) !important;
+
+  width: max-content !important;
+
+  white-space: nowrap !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 24px !important;
+
+  font-weight: 700 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .sam-debate-main {
+    left: 35px !important;
+
+    width: calc(100% - 70px) !important;
+
+    gap: 20px !important;
+  }
+
+  .sam-debate-question {
+    width: calc(100% - 70px) !important;
+  }
+
+  .sam-debate-next-button {
+    width: 220px !important;
+
+    font-size: 17px !important;
+  }
+}
+/* =========================================================
+   CHỈNH VỊ TRÍ NÚT + KHUNG CÂU HỎI
+   ========================================================= */
+
+/* Nút CÂU HỎI TIẾP THEO */
+.sam-debate-next-button {
+  top: 82px !important;
+  right: 35px !important;
+}
+
+
+/* Khung CÂU HỎI PHẢN BIỆN */
+.sam-debate-question {
+  top: 175px !important;
+}
+
+
+/* Tạo khoảng cách rõ giữa nút và khung câu hỏi */
+.sam-debate-question {
+  margin-top: 5px !important;
+}
+/* =========================================================
+   FEEDBACK PAGE
+   ========================================================= */
+
+.feedback-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 38px 70px 55px;
+
+  background: #12061f;
+  color: #ffffff;
+
+  font-family: "Poppins", sans-serif;
+
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.feedback-logo {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 27px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+
+  color: #ffffff;
+
+  margin-bottom: 42px;
+}
+
+
+/* =========================================================
+   TIÊU ĐỀ
+   ========================================================= */
+
+.feedback-title {
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 54px;
+  font-weight: 400;
+
+  line-height: 1;
+
+  color: #ffffff;
+
+  margin-bottom: 38px;
+}
+
+
+/* =========================================================
+   KHU VỰC NHẬN XÉT
+   ========================================================= */
+
+.feedback-content {
+  width: 100%;
+  max-width: 1100px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+
+/* =========================================================
+   TỪNG KHUNG NHẬN XÉT
+   ========================================================= */
+
+.feedback-card {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 23px 28px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.07);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.12);
+
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* =========================================================
+   TÊN MỤC
+   ========================================================= */
+
+.feedback-card-title {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 21px;
+  font-weight: 800;
+
+  color: #ffffff;
+
+  margin-bottom: 9px;
+}
+
+
+/* =========================================================
+   NỘI DUNG
+   ========================================================= */
+
+.feedback-card-text {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 16px;
+  font-weight: 400;
+
+  line-height: 1.7;
+
+  color: #e9e1ef;
+
+  white-space: pre-line;
+}
+
+
+/* =========================================================
+   MÀU TỪNG KHUNG
+   ========================================================= */
+
+.feedback-strength {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(105, 55, 145, 0.32),
+      rgba(255, 255, 255, 0.055)
+    );
+}
+
+
+.feedback-weakness {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(70, 34, 93, 0.42),
+      rgba(255, 255, 255, 0.055)
+    );
+}
+
+
+.feedback-suggestion {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(91, 42, 122, 0.38),
+      rgba(255, 255, 255, 0.055)
+    );
+}
+
+
+/* =========================================================
+   NÚT
+   ========================================================= */
+
+.feedback-main-button {
+  margin-top: 32px;
+
+  min-width: 190px;
+  height: 52px;
+
+  padding: 0 28px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: #35086b;
+
+  color: #ffffff;
+
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 15px;
+  font-weight: 400;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 20px rgba(170, 59, 255, 0.28);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.feedback-main-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 27px rgba(170, 59, 255, 0.42);
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.feedback-loading {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: max-content;
+  max-width: calc(100% - 40px);
+
+  text-align: center;
+}
+
+
+.feedback-loading-title {
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 43px;
+  font-weight: 400;
+
+  line-height: 1;
+
+  margin-bottom: 17px;
+}
+
+
+.feedback-loading-text {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.feedback-error-wrapper {
+  width: 100%;
+  max-width: 750px;
+}
+
+
+.feedback-error-box {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 20px 24px;
+
+  margin-bottom: 5px;
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.07);
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  color: #ffb7b7;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .feedback-page {
+    padding: 32px 35px 45px;
+  }
+
+  .feedback-logo {
+    margin-bottom: 35px;
+    font-size: 24px;
+  }
+
+  .feedback-title {
+    font-size: 44px;
+    margin-bottom: 30px;
+  }
+
+  .feedback-card {
+    padding: 20px 22px;
+  }
+
+  .feedback-card-title {
+    font-size: 19px;
+  }
+
+  .feedback-card-text {
+    font-size: 15px;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .feedback-page {
+    padding: 28px 22px 40px;
+  }
+
+  .feedback-title {
+    font-size: 38px;
+  }
+
+  .feedback-loading-text {
+    white-space: normal;
+  }
+
+  .feedback-loading-title {
+    font-size: 36px;
+  }
+
+  .feedback-main-button {
+    width: 100%;
+  }
+}
+/* =========================================================
+   FEEDBACK - NEW FEAR2HEAR STYLE
+   DÁN Ở CUỐI APP.CSS
+   ========================================================= */
+
+.feedback-page {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+  box-sizing: border-box !important;
+  padding: 34px 72px 70px !important;
+
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      rgba(117, 45, 171, 0.18),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 8% 82%,
+      rgba(86, 34, 129, 0.14),
+      transparent 25%
+    ),
+    #12061f !important;
+
+  color: #fff !important;
+  font-family: "Poppins", sans-serif !important;
+  overflow: hidden !important;
+}
+
+
+/* ===== DECORATION ===== */
+
+.feedback-decoration {
+  position: absolute !important;
+  pointer-events: none !important;
+  border: 1px solid rgba(184, 113, 255, 0.12) !important;
+  border-radius: 50% !important;
+}
+
+.feedback-decoration-1 {
+  width: 420px !important;
+  height: 420px !important;
+  right: -180px !important;
+  top: 80px !important;
+}
+
+.feedback-decoration-2 {
+  width: 250px !important;
+  height: 250px !important;
+  left: -150px !important;
+  bottom: -100px !important;
+  border-color: rgba(184, 113, 255, 0.09) !important;
+}
+
+.feedback-star {
+  position: absolute !important;
+  color: rgba(205, 157, 255, 0.65) !important;
+  pointer-events: none !important;
+}
+
+.feedback-star-1 {
+  top: 125px !important;
+  right: 20% !important;
+  font-size: 18px !important;
+}
+
+.feedback-star-2 {
+  top: 275px !important;
+  left: 4% !important;
+  font-size: 13px !important;
+}
+
+.feedback-star-3 {
+  right: 7% !important;
+  bottom: 120px !important;
+  font-size: 25px !important;
+  opacity: 0.5 !important;
+}
+
+
+/* ===== LOGO ===== */
+
+.feedback-logo {
+  position: relative !important;
+  z-index: 2 !important;
+
+  font-family: "Poppins", sans-serif !important;
+  font-size: 27px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+
+  color: #fff !important;
+
+  margin-bottom: 54px !important;
+}
+
+
+/* ===== HEADER ===== */
+
+.feedback-header {
+  position: relative !important;
+  z-index: 2 !important;
+
+  max-width: 1050px !important;
+  margin-bottom: 34px !important;
+}
+
+.feedback-small-title {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 3px !important;
+
+  color: rgba(208, 164, 255, 0.72) !important;
+
+  margin-bottom: 12px !important;
+}
+
+.feedback-title {
+  margin: 0 !important;
+
+  font-family: "Paytone One", sans-serif !important;
+  font-size: 55px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+
+  color: #fff !important;
+}
+
+.feedback-title-line {
+  width: 72px !important;
+  height: 4px !important;
+
+  margin-top: 17px !important;
+
+  border-radius: 999px !important;
+
+  background: #8e3ed0 !important;
+
+  box-shadow:
+    0 0 13px rgba(170, 59, 255, 0.42) !important;
+}
+
+.feedback-subtitle {
+  margin: 15px 0 0 !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+
+  color: rgba(255, 255, 255, 0.64) !important;
+}
+
+
+/* ===== CONTENT ===== */
+
+.feedback-content {
+  position: relative !important;
+  z-index: 2 !important;
+
+  width: 100% !important;
+  max-width: 1120px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+
+/* ===== CARDS ===== */
+
+.feedback-card {
+  position: relative !important;
+
+  width: 100% !important;
+  min-height: 125px !important;
+
+  box-sizing: border-box !important;
+
+  display: flex !important;
+  align-items: stretch !important;
+
+  border-radius: 18px !important;
+  overflow: hidden !important;
+
+  background:
+    linear-gradient(
+      105deg,
+      rgba(71, 29, 103, 0.72),
+      rgba(42, 17, 63, 0.72)
+    ) !important;
+
+  border: 1px solid rgba(190, 137, 230, 0.13) !important;
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.16) !important;
+
+  transition: 0.22s ease !important;
+}
+
+.feedback-card:hover {
+  transform: translateX(5px) !important;
+
+  border-color:
+    rgba(190, 137, 230, 0.25) !important;
+
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.23),
+    0 0 22px rgba(135, 54, 190, 0.08) !important;
+}
+
+
+/* ===== CARD NUMBER ===== */
+
+.feedback-card-number {
+  width: 92px !important;
+  flex-shrink: 0 !important;
+
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+
+  padding-top: 27px !important;
+  box-sizing: border-box !important;
+
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 22px !important;
+  font-weight: 400 !important;
+
+  color: rgba(210, 166, 246, 0.55) !important;
+
+  border-right:
+    1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+
+/* ===== CARD CONTENT ===== */
+
+.feedback-card-content {
+  flex: 1 !important;
+  padding: 23px 29px 25px !important;
+}
+
+.feedback-card-title {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 17px !important;
+  font-weight: 800 !important;
+
+  letter-spacing: 0.5px !important;
+
+  color: #fff !important;
+}
+
+.feedback-card-line {
+  width: 35px !important;
+  height: 2px !important;
+
+  margin-top: 8px !important;
+  margin-bottom: 10px !important;
+
+  border-radius: 999px !important;
+
+  background: rgba(184, 113, 255, 0.7) !important;
+}
+
+.feedback-card-text {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 15px !important;
+  font-weight: 400 !important;
+
+  line-height: 1.7 !important;
+
+  color: rgba(255, 255, 255, 0.78) !important;
+
+  white-space: pre-line !important;
+}
+
+
+/* ===== CARD COLORS ===== */
+
+.feedback-strength {
+  background:
+    linear-gradient(
+      105deg,
+      rgba(72, 30, 103, 0.82),
+      rgba(39, 17, 57, 0.74)
+    ) !important;
+}
+
+.feedback-weakness {
+  background:
+    linear-gradient(
+      105deg,
+      rgba(59, 25, 84, 0.82),
+      rgba(36, 16, 52, 0.74)
+    ) !important;
+}
+
+.feedback-suggestion {
+  background:
+    linear-gradient(
+      105deg,
+      rgba(81, 34, 111, 0.82),
+      rgba(42, 17, 61, 0.74)
+    ) !important;
+}
+
+
+/* ===== BUTTON ===== */
+
+.feedback-main-button {
+  position: relative !important;
+  z-index: 3 !important;
+
+  margin-top: 30px !important;
+
+  min-width: 190px !important;
+  height: 52px !important;
+
+  padding: 0 30px !important;
+
+  border: none !important;
+  border-radius: 15px !important;
+
+  background: #35086b !important;
+
+  color: #fff !important;
+
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 15px !important;
+  font-weight: 400 !important;
+
+  cursor: pointer !important;
+
+  box-shadow:
+    0 0 20px rgba(170, 59, 255, 0.22) !important;
+
+  transition: 0.2s ease !important;
+}
+
+.feedback-main-button:hover {
+  transform: translateY(-2px) !important;
+
+  background: #421080 !important;
+
+  box-shadow:
+    0 0 28px rgba(170, 59, 255, 0.38) !important;
+}
+
+
+/* ===== BOTTOM LINE ===== */
+
+.feedback-bottom-line {
+  position: absolute !important;
+
+  left: 72px !important;
+  bottom: 30px !important;
+
+  width: 125px !important;
+  height: 1px !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(188, 122, 255, 0.45),
+      transparent
+    ) !important;
+}
+
+
+/* ===== LOADING ===== */
+
+.feedback-loading {
+  position: absolute !important;
+
+  top: 50% !important;
+  left: 50% !important;
+
+  transform: translate(-50%, -50%) !important;
+
+  width: max-content !important;
+
+  text-align: center !important;
+
+  z-index: 3 !important;
+}
+
+.feedback-loading-title {
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 45px !important;
+  font-weight: 400 !important;
+
+  color: #fff !important;
+}
+
+.feedback-loading-line {
+  width: 65px !important;
+  height: 3px !important;
+
+  margin: 17px auto 15px !important;
+
+  border-radius: 999px !important;
+
+  background: #8e3ed0 !important;
+
+  box-shadow:
+    0 0 15px rgba(170, 59, 255, 0.4) !important;
+}
+
+.feedback-loading-text {
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 16px !important;
+  font-weight: 500 !important;
+
+  color: rgba(255, 255, 255, 0.62) !important;
+
+  white-space: nowrap !important;
+}
+
+
+/* ===== ERROR ===== */
+
+.feedback-error-wrapper {
+  position: relative !important;
+  z-index: 3 !important;
+
+  max-width: 720px !important;
+  margin-top: 100px !important;
+}
+
+.feedback-error-title {
+  font-family: "Paytone One", sans-serif !important;
+
+  font-size: 38px !important;
+
+  color: #fff !important;
+
+  margin-bottom: 20px !important;
+}
+
+.feedback-error-box {
+  padding: 20px 24px !important;
+
+  border-radius: 17px !important;
+
+  background: rgba(75, 28, 92, 0.55) !important;
+
+  border:
+    1px solid rgba(210, 130, 230, 0.16) !important;
+
+  font-family: "Poppins", sans-serif !important;
+
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+
+  color: rgba(255, 220, 230, 0.82) !important;
+}
+
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 900px) {
+
+  .feedback-page {
+    padding: 30px 35px 60px !important;
+  }
+
+  .feedback-title {
+    font-size: 43px !important;
+  }
+
+  .feedback-card-number {
+    width: 70px !important;
+  }
+
+  .feedback-card-content {
+    padding: 21px 22px !important;
+  }
+
+  .feedback-bottom-line {
+    left: 35px !important;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .feedback-page {
+    padding: 25px 20px 55px !important;
+  }
+
+  .feedback-logo {
+    font-size: 23px !important;
+  }
+
+  .feedback-title {
+    font-size: 34px !important;
+  }
+
+  .feedback-card-number {
+    width: 55px !important;
+    padding-top: 22px !important;
+    font-size: 18px !important;
+  }
+
+  .feedback-card-content {
+    padding: 19px 17px 21px !important;
+  }
+
+  .feedback-card-title {
+    font-size: 14px !important;
+  }
+
+  .feedback-card-text {
+    font-size: 13px !important;
+  }
+
+  .feedback-main-button {
+    width: 100% !important;
+    max-width: 210px !important;
+  }
+}

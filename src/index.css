@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Paytone+One&family=Poppins:wght@700;800;900&display=swap');
+
+:root {
+  font-family: "Poppins", sans-serif;
+
+  color: #ffffff;
+  background: #12061f;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #12061f;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
