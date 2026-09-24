@@ -8,6 +8,8 @@ export default function SamQuestions() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const API_URL = "https://fear2hear.onrender.com";
+
   const getPresentationData = () => {
     const topic =
       localStorage.getItem("presentationTopic") || "";
@@ -68,7 +70,7 @@ export default function SamQuestions() {
       );
 
       const response = await fetch(
-        "http://localhost:3001/api/generate-questions",
+        `${API_URL}/api/generate-questions`,
         {
           method: "POST",
           headers: {
@@ -200,7 +202,7 @@ export default function SamQuestions() {
 
       if (err instanceof TypeError) {
         setError(
-          "Không kết nối được với AI server. Hãy kiểm tra terminal node server.mjs."
+          "Không kết nối được với AI server. Hãy kiểm tra lại kết nối mạng hoặc server Render."
         );
       } else {
         setError(

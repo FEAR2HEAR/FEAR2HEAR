@@ -91,6 +91,12 @@ export default function Presentation() {
   const [cameraError, setCameraError] =
     useState(false);
 
+  const [mediaReady, setMediaReady] =
+    useState(false);
+
+  const [speechError, setSpeechError] =
+    useState("");
+
 
   /* =======================================================
      SPEECH TO TEXT
@@ -292,6 +298,9 @@ export default function Presentation() {
 
         }
 
+        // Chỉ khởi động Speech Recognition sau khi mic đã được cấp quyền.
+        setMediaReady(true);
+
       } catch (error) {
 
         console.error(
@@ -329,14 +338,18 @@ export default function Presentation() {
 
   useEffect(() => {
 
+    if (!mediaReady || presentationFinished) {
+      return;
+    }
+
     const SpeechRecognition =
       window.SpeechRecognition ||
       window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
 
-      console.log(
-        "Trình duyệt không hỗ trợ Speech Recognition."
+      setSpeechError(
+        "Trình duyệt này không hỗ trợ nhận giọng nói. Hãy dùng Google Chrome trên máy tính."
       );
 
       return;
@@ -353,6 +366,8 @@ export default function Presentation() {
 
     recognition.interimResults =
       true;
+
+    recognition.maxAlternatives = 1;
 
 
     recognition.onresult =
@@ -456,17 +471,31 @@ export default function Presentation() {
           event.error
         );
 
-
         if (
-          event.error ===
-            "not-allowed" ||
-          event.error ===
-            "service-not-allowed"
+          event.error === "not-allowed" ||
+          event.error === "service-not-allowed"
         ) {
 
           shouldRestartRecognitionRef.current =
             false;
 
+          setSpeechError(
+            "Microphone đã bị từ chối cho nhận giọng nói. Hãy kiểm tra quyền Microphone của fear2hear.vercel.app."
+          );
+
+          return;
+        }
+
+        if (event.error === "network") {
+          setSpeechError(
+            "Dịch vụ nhận giọng nói của trình duyệt đang không kết nối được. Hãy thử Chrome và tải lại trang."
+          );
+        } else if (event.error === "audio-capture") {
+          setSpeechError(
+            "Không lấy được âm thanh từ microphone. Hãy kiểm tra microphone đang hoạt động."
+          );
+        } else if (event.error === "no-speech") {
+          setSpeechError("");
         }
 
       };
@@ -481,15 +510,13 @@ export default function Presentation() {
           !presentationFinished
         ) {
 
-          try {
-
-            recognition.start();
-
-          } catch {
-
-            // bỏ qua
-
-          }
+          setTimeout(() => {
+            try {
+              recognition.start();
+            } catch {
+              // Recognition có thể đang ở trạng thái STARTING.
+            }
+          }, 250);
 
         }
 
@@ -503,10 +530,15 @@ export default function Presentation() {
     try {
 
       recognition.start();
+      setSpeechError("");
 
-    } catch {
+    } catch (error) {
 
-      // bỏ qua
+      console.error("Không thể khởi động Speech Recognition:", error);
+
+      setSpeechError(
+        "Chưa thể khởi động nhận giọng nói. Hãy thử tải lại trang bằng Google Chrome."
+      );
 
     }
 
@@ -1277,6 +1309,33 @@ export default function Presentation() {
         </div>
 
       </div>
+
+
+      {speechError &&
+        !presentationFinished &&
+        timeLeft > 0 && (
+          <div
+            style={{
+              position: "fixed",
+              top: "105px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 150,
+              width: "620px",
+              maxWidth: "calc(100vw - 40px)",
+              padding: "12px 18px",
+              borderRadius: "16px",
+              background: "rgba(115, 39, 39, 0.96)",
+              color: "#ffffff",
+              textAlign: "center",
+              fontFamily: '"Noto Sans", sans-serif',
+              fontSize: "15px",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+            }}
+          >
+            🎙️ {speechError}
+          </div>
+        )}
 
 
       {/* ===================================================
