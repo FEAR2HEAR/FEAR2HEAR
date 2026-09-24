@@ -108,6 +108,9 @@ export default function Presentation() {
   const recognitionRef =
     useRef(null);
 
+  const recognitionRunningRef =
+    useRef(false);
+
   const finalTranscriptRef =
     useRef("");
 
@@ -358,209 +361,239 @@ export default function Presentation() {
     const recognition =
       new SpeechRecognition();
 
-    recognition.lang =
-      "vi-VN";
-
-    recognition.continuous =
-      true;
-
-    recognition.interimResults =
-      true;
-
+    recognition.lang = "vi-VN";
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
+    let restartTimer = null;
 
-    recognition.onresult =
-      (event) => {
+    const startRecognition = () => {
 
-        let interimText = "";
-
-
-        for (
-          let i = event.resultIndex;
-          i < event.results.length;
-          i++
-        ) {
-
-          const text =
-            event.results[i][0].transcript;
-
-
-          if (!text.trim()) {
-            continue;
-          }
-
-
-          /* Có tiếng nói */
-          const speechNow = Date.now();
-
-          if (silenceStartedAtRef.current !== null) {
-            const duration =
-              (speechNow - silenceStartedAtRef.current) / 1000;
-
-            performanceMetricsRef.current.totalSilenceDuration += Math.max(0, duration);
-            performanceMetricsRef.current.maxSilenceDuration = Math.max(
-              performanceMetricsRef.current.maxSilenceDuration,
-              Math.max(0, duration)
-            );
-            silenceStartedAtRef.current = null;
-          }
-
-          lastSpeechAtRef.current = speechNow;
-          setSilenceWarning(false);
-
-
-          if (
-            event.results[i].isFinal
-          ) {
-
-            finalTranscriptRef.current +=
-              text + " ";
-
-
-            /* ---------------------------------------
-               PHÁT HIỆN ẤP ÚNG
-               --------------------------------------- */
-
-            const fillerRegex =
-              /\b(ừm+|ờm+|ừ+|ờ+|à+|ơ+|kiểu là|kiểu như|nói chung là|thì là)\b/gi;
-
-            const matches =
-              text.match(fillerRegex);
-
-
-            if (matches) {
-
-              const now =
-                Date.now();
-
-              matches.forEach(() => {
-
-                fillerTimesRef.current.push(now);
-                performanceMetricsRef.current.fillerCount += 1;
-
-              });
-
-            }
-
-          } else {
-
-            interimText +=
-              text;
-
-          }
-
-        }
-
-
-        setTranscript(
-          (
-            finalTranscriptRef.current +
-            interimText
-          ).trim()
-        );
-
-      };
-
-
-    recognition.onerror =
-      (event) => {
-
-        console.log(
-          "Speech recognition:",
-          event.error
-        );
-
-        if (
-          event.error === "not-allowed" ||
-          event.error === "service-not-allowed"
-        ) {
-
-          shouldRestartRecognitionRef.current =
-            false;
-
-          setSpeechError(
-            "Microphone đã bị từ chối cho nhận giọng nói. Hãy kiểm tra quyền Microphone của fear2hear.vercel.app."
-          );
-
-          return;
-        }
-
-        if (event.error === "network") {
-          setSpeechError(
-            "Dịch vụ nhận giọng nói của trình duyệt đang không kết nối được. Hãy thử Chrome và tải lại trang."
-          );
-        } else if (event.error === "audio-capture") {
-          setSpeechError(
-            "Không lấy được âm thanh từ microphone. Hãy kiểm tra microphone đang hoạt động."
-          );
-        } else if (event.error === "no-speech") {
-          setSpeechError("");
-        }
-
-      };
-
-
-    recognition.onend =
-      () => {
-
-        if (
-          shouldRestartRecognitionRef.current &&
-          timeLeftRef.current > 0 &&
-          !presentationFinished
-        ) {
-
-          setTimeout(() => {
-            try {
-              recognition.start();
-            } catch {
-              // Recognition có thể đang ở trạng thái STARTING.
-            }
-          }, 250);
-
-        }
-
-      };
-
-
-    recognitionRef.current =
-      recognition;
-
-
-    try {
-
-      recognition.start();
-      setSpeechError("");
-
-    } catch (error) {
-
-      console.error("Không thể khởi động Speech Recognition:", error);
-
-      setSpeechError(
-        "Chưa thể khởi động nhận giọng nói. Hãy thử tải lại trang bằng Google Chrome."
-      );
-
-    }
-
-
-    return () => {
-
-      shouldRestartRecognitionRef.current =
-        false;
+      if (
+        presentationFinished ||
+        timeLeftRef.current <= 0 ||
+        recognitionRunningRef.current
+      ) {
+        return;
+      }
 
       try {
 
-        recognition.stop();
+        recognition.start();
 
-      } catch {
+      } catch (error) {
 
-        // bỏ qua
+        // Chrome có thể báo InvalidStateError nếu đang khởi động.
+        // Không coi lỗi này là microphone bị hỏng.
+        console.log(
+          "Speech Recognition start:",
+          error?.message || error
+        );
 
       }
-
     };
 
-  }, [presentationFinished]);
+    recognition.onstart = () => {
+      recognitionRunningRef.current = true;
+      setSpeechError("");
+    };
+
+    recognition.onaudiostart = () => {
+      console.log("🎙️ Speech Recognition đã nhận audio từ microphone.");
+    };
+
+    recognition.onspeechstart = () => {
+      console.log("🗣️ Speech Recognition phát hiện giọng nói.");
+    };
+
+    recognition.onresult = (event) => {
+
+      let interimText = "";
+
+      for (
+        let i = event.resultIndex;
+        i < event.results.length;
+        i++
+      ) {
+
+        const text =
+          event.results[i][0].transcript;
+
+        if (!text.trim()) {
+          continue;
+        }
+
+        const speechNow = Date.now();
+
+        if (silenceStartedAtRef.current !== null) {
+          const duration =
+            (speechNow - silenceStartedAtRef.current) / 1000;
+
+          performanceMetricsRef.current.totalSilenceDuration +=
+            Math.max(0, duration);
+
+          performanceMetricsRef.current.maxSilenceDuration = Math.max(
+            performanceMetricsRef.current.maxSilenceDuration,
+            Math.max(0, duration)
+          );
+
+          silenceStartedAtRef.current = null;
+        }
+
+        lastSpeechAtRef.current = speechNow;
+        setSilenceWarning(false);
+
+        if (event.results[i].isFinal) {
+
+          finalTranscriptRef.current +=
+            text + " ";
+
+          const fillerRegex =
+            /\b(ừm+|ờm+|ừ+|ờ+|à+|ơ+|kiểu là|kiểu như|nói chung là|thì là)\b/gi;
+
+          const matches =
+            text.match(fillerRegex);
+
+          if (matches) {
+            const now = Date.now();
+
+            matches.forEach(() => {
+              fillerTimesRef.current.push(now);
+              performanceMetricsRef.current.fillerCount += 1;
+            });
+          }
+
+        } else {
+
+          interimText += text;
+
+        }
+      }
+
+      setTranscript(
+        (
+          finalTranscriptRef.current +
+          interimText
+        ).trim()
+      );
+    };
+
+    recognition.onerror = (event) => {
+
+      console.error(
+        "Speech Recognition error:",
+        event.error
+      );
+
+      recognitionRunningRef.current = false;
+
+      if (
+        event.error === "not-allowed" ||
+        event.error === "service-not-allowed"
+      ) {
+
+        shouldRestartRecognitionRef.current = false;
+
+        setSpeechError(
+          "Chrome chưa cho Speech Recognition dùng microphone. Hãy bấm biểu tượng 🔒 cạnh địa chỉ web → Microphone → Allow, rồi tải lại trang."
+        );
+
+        return;
+      }
+
+      if (event.error === "audio-capture") {
+        setSpeechError(
+          "Không lấy được âm thanh từ microphone. Hãy kiểm tra microphone đang hoạt động."
+        );
+        return;
+      }
+
+      if (event.error === "network") {
+        setSpeechError(
+          "Chrome không kết nối được dịch vụ nhận giọng nói. Hãy thử tải lại trang và bấm vào màn hình một lần trước khi nói."
+        );
+        return;
+      }
+
+      if (event.error === "no-speech") {
+        setSpeechError("");
+      }
+    };
+
+    recognition.onend = () => {
+
+      recognitionRunningRef.current = false;
+
+      if (
+        shouldRestartRecognitionRef.current &&
+        timeLeftRef.current > 0 &&
+        !presentationFinished
+      ) {
+
+        clearTimeout(restartTimer);
+
+        restartTimer = setTimeout(() => {
+          startRecognition();
+        }, 500);
+      }
+    };
+
+    recognitionRef.current = recognition;
+
+    shouldRestartRecognitionRef.current = true;
+
+    // Thử khởi động ngay sau khi microphone đã được cấp quyền.
+    startRecognition();
+
+    // Một số phiên bản Chrome yêu cầu Speech Recognition được bắt đầu
+    // từ một thao tác thật của người dùng. Nếu lần tự động trên không chạy,
+    // lần click đầu tiên vào trang sẽ khởi động lại nó.
+    const retryFromUserGesture = () => {
+      if (!recognitionRunningRef.current) {
+        startRecognition();
+      }
+    };
+
+    window.addEventListener(
+      "pointerdown",
+      retryFromUserGesture
+    );
+
+    window.addEventListener(
+      "keydown",
+      retryFromUserGesture
+    );
+
+    return () => {
+
+      clearTimeout(restartTimer);
+
+      window.removeEventListener(
+        "pointerdown",
+        retryFromUserGesture
+      );
+
+      window.removeEventListener(
+        "keydown",
+        retryFromUserGesture
+      );
+
+      shouldRestartRecognitionRef.current = false;
+      recognitionRunningRef.current = false;
+
+      try {
+        recognition.stop();
+      } catch {
+        // bỏ qua
+      }
+
+      if (recognitionRef.current === recognition) {
+        recognitionRef.current = null;
+      }
+    };
+
+  }, [mediaReady, presentationFinished]);
 
 
   /* =======================================================
