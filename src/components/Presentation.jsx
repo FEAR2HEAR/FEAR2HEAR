@@ -107,6 +107,9 @@ export default function Presentation() {
   const presentationFinishedRef =
     useRef(false);
 
+  const speechRestartTimeoutRef =
+    useRef(null);
+
   const [speechListening, setSpeechListening] =
     useState(false);
 
@@ -362,6 +365,10 @@ export default function Presentation() {
 
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+
+          try {
+            await videoRef.current.play();
+          } catch {}
         }
       } catch (error) {
         console.error(
@@ -382,6 +389,8 @@ export default function Presentation() {
         streamRef.current
           .getTracks()
           .forEach((track) => track.stop());
+
+        streamRef.current = null;
       }
     };
   }, []);
@@ -567,6 +576,24 @@ export default function Presentation() {
 
       setSpeechListening(false);
 
+      // ===================================================
+      // ABORTED
+      // Chrome đôi khi tự abort phiên recognition.
+      // Không coi đây là lỗi chết.
+      // ===================================================
+
+      if (
+        event.error === "aborted"
+      ) {
+        console.log(
+          "ℹ️ Speech Recognition bị aborted. Sẽ thử khởi động lại."
+        );
+
+        setSpeechError("");
+
+        return;
+      }
+
       if (
         event.error === "not-allowed" ||
         event.error ===
@@ -631,31 +658,40 @@ export default function Presentation() {
       setSpeechListening(false);
 
       if (
+        speechRestartTimeoutRef.current
+      ) {
+        clearTimeout(
+          speechRestartTimeoutRef.current
+        );
+      }
+
+      if (
         shouldRestartRecognitionRef.current &&
         !presentationFinishedRef.current &&
         timeLeftRef.current > 0
       ) {
-        setTimeout(() => {
-          if (
-            !recognitionRunningRef.current &&
-            shouldRestartRecognitionRef.current &&
-            !presentationFinishedRef.current &&
-            timeLeftRef.current > 0
-          ) {
-            try {
-              recognition.start();
+        speechRestartTimeoutRef.current =
+          setTimeout(() => {
+            if (
+              !recognitionRunningRef.current &&
+              shouldRestartRecognitionRef.current &&
+              !presentationFinishedRef.current &&
+              timeLeftRef.current > 0
+            ) {
+              try {
+                recognition.start();
 
-              console.log(
-                "🔄 SPEECH RESTARTED"
-              );
-            } catch (error) {
-              console.log(
-                "Recognition restart:",
-                error?.message
-              );
+                console.log(
+                  "🔄 SPEECH RESTARTED"
+                );
+              } catch (error) {
+                console.log(
+                  "Recognition restart:",
+                  error?.message
+                );
+              }
             }
-          }
-        }, 300);
+          }, 800);
       }
     };
 
@@ -668,6 +704,17 @@ export default function Presentation() {
 
       recognitionRunningRef.current =
         false;
+
+      if (
+        speechRestartTimeoutRef.current
+      ) {
+        clearTimeout(
+          speechRestartTimeoutRef.current
+        );
+
+        speechRestartTimeoutRef.current =
+          null;
+      }
 
       try {
         recognition.stop();
@@ -920,6 +967,12 @@ export default function Presentation() {
   // =======================================================
   // FACE LANDMARK + NHÌN CAMERA
   // =======================================================
+  //
+  // QUAN TRỌNG:
+  // Không để timeLeft trong dependency.
+  // Nếu có timeLeft ở đây, FaceLandmarker sẽ bị
+  // destroy + tạo lại mỗi giây.
+  // =======================================================
 
   useEffect(() => {
     if (
@@ -949,6 +1002,7 @@ export default function Presentation() {
           baseOptions: {
             modelAssetPath:
               "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+            delegate: "CPU",
           },
           runningMode: "VIDEO",
           numFaces: 1,
@@ -957,32 +1011,17 @@ export default function Presentation() {
           minTrackingConfidence: 0.5,
         };
 
-        try {
-          faceLandmarker =
-            await FaceLandmarker.createFromOptions(
-              vision,
-              {
-                ...options,
-                baseOptions: {
-                  ...options.baseOptions,
-                  delegate: "GPU",
-                },
-              }
-            );
-        } catch (gpuError) {
-          console.warn(
-            "FaceLandmarker GPU lỗi, chuyển sang CPU:",
-            gpuError
+        faceLandmarker =
+          await FaceLandmarker.createFromOptions(
+            vision,
+            options
           );
 
-          faceLandmarker =
-            await FaceLandmarker.createFromOptions(
-              vision,
-              options
-            );
-        }
-
         if (cancelled) {
+          try {
+            faceLandmarker.close();
+          } catch {}
+
           return;
         }
 
@@ -1008,10 +1047,12 @@ export default function Presentation() {
           const now =
             performance.now();
 
+          // Nhận diện khuôn mặt khoảng 8 lần/giây
+          // thay vì liên tục để giảm tải CPU.
           if (
             now -
               lastDetectionTime <
-            100
+            125
           ) {
             return;
           }
@@ -1269,10 +1310,9 @@ export default function Presentation() {
         } catch {}
       }
     };
-  }, [
-    presentationFinished,
-    timeLeft,
-  ]);
+
+    // KHÔNG thêm timeLeft vào đây.
+  }, [presentationFinished]);
 
   // =======================================================
   // HẾT GIỜ
@@ -1288,6 +1328,17 @@ export default function Presentation() {
 
     shouldRestartRecognitionRef.current =
       false;
+
+    if (
+      speechRestartTimeoutRef.current
+    ) {
+      clearTimeout(
+        speechRestartTimeoutRef.current
+      );
+
+      speechRestartTimeoutRef.current =
+        null;
+    }
 
     if (recognitionRef.current) {
       try {
@@ -1360,6 +1411,17 @@ export default function Presentation() {
 
     shouldRestartRecognitionRef.current =
       false;
+
+    if (
+      speechRestartTimeoutRef.current
+    ) {
+      clearTimeout(
+        speechRestartTimeoutRef.current
+      );
+
+      speechRestartTimeoutRef.current =
+        null;
+    }
 
     if (recognitionRef.current) {
       try {
