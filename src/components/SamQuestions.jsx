@@ -69,20 +69,19 @@ export default function SamQuestions() {
         "🚀 ĐANG GỌI SERVER..."
       );
 
-      const response = await fetch(
-        `${API_URL}/api/generate-questions`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            topic,
-            transcript,
-          }),
-        }
-      );
-
+     const response = await fetch(
+  `${API_URL}/api/generate-questions`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      topic,
+      transcript,
+    }),
+  }
+);
       console.log(
         "📡 Server status:",
         response.status
