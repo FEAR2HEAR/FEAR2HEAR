@@ -5,14 +5,24 @@ import { GoogleGenAI } from "@google/genai";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 app.use(express.json({ limit: "2mb" }));
 
 const PORT = process.env.PORT || 3001;
 const apiKey = process.env.GEMINI_API_KEY;
 
 if (!apiKey) {
-  console.error("❌ Không tìm thấy GEMINI_API_KEY trong file .env");
+  console.error(
+    "❌ Không tìm thấy GEMINI_API_KEY trong biến môi trường."
+  );
+
   process.exit(1);
 }
 
@@ -25,7 +35,20 @@ const MODEL = "gemini-3.6-flash";
 console.log(
   `FEAR2HEAR AI server đang chạy tại http://localhost:${PORT}`
 );
+
 console.log(`🤖 Gemini model: ${MODEL}`);
+
+/* =========================================================
+   REQUEST LOG
+========================================================= */
+
+app.use((req, res, next) => {
+  console.log(
+    `📡 ${req.method} ${req.originalUrl}`
+  );
+
+  next();
+});
 
 /* =========================================================
    HELPER
@@ -33,7 +56,9 @@ console.log(`🤖 Gemini model: ${MODEL}`);
 
 function parseJson(text) {
   if (!text) {
-    throw new Error("Gemini không trả về nội dung.");
+    throw new Error(
+      "Gemini không trả về nội dung."
+    );
   }
 
   try {
@@ -55,11 +80,15 @@ function parseJson(text) {
 }
 
 function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 function isDailyQuotaError(error) {
-  const message = String(error?.message || "");
+  const message = String(
+    error?.message || ""
+  );
 
   let raw = "";
 
@@ -69,24 +98,34 @@ function isDailyQuotaError(error) {
     raw = "";
   }
 
-  const text = `${message} ${raw}`.toLowerCase();
+  const text =
+    `${message} ${raw}`.toLowerCase();
 
   return (
-    text.includes("generaterequestsperday") ||
-    text.includes("perdayperprojectpermodel") ||
+    text.includes(
+      "generaterequestsperday"
+    ) ||
+    text.includes(
+      "perdayperprojectpermodel"
+    ) ||
     text.includes("daily quota") ||
     text.includes("quota_exceeded") ||
-    (text.includes("quota exceeded") &&
-      text.includes("perday"))
+    (
+      text.includes("quota exceeded") &&
+      text.includes("perday")
+    )
   );
 }
 
 function getRetrySeconds(error) {
-  const message = String(error?.message || "");
-
-  const retryDelayMatch = message.match(
-    /retryDelay["']?\s*:\s*["']?([\d.]+)s/i
+  const message = String(
+    error?.message || ""
   );
+
+  const retryDelayMatch =
+    message.match(
+      /retryDelay["']?\s*:\s*["']?([\d.]+)s/i
+    );
 
   if (retryDelayMatch) {
     return Math.ceil(
@@ -94,9 +133,10 @@ function getRetrySeconds(error) {
     );
   }
 
-  const retryInMatch = message.match(
-    /retry in\s+([\d.]+)s/i
-  );
+  const retryInMatch =
+    message.match(
+      /retry in\s+([\d.]+)s/i
+    );
 
   if (retryInMatch) {
     return Math.ceil(
@@ -138,30 +178,34 @@ async function generateWithRetry(prompt) {
           model: MODEL,
           contents: prompt,
           config: {
-            responseMimeType: "application/json",
+            responseMimeType:
+              "application/json",
             temperature: 0.7,
           },
         });
 
-      console.log("✅ Gemini trả kết quả.");
+      console.log(
+        "✅ Gemini trả kết quả."
+      );
 
       return response;
     } catch (error) {
-      const status = getErrorStatus(error);
+      const status =
+        getErrorStatus(error);
 
       console.error(
         `❌ Gemini error lần ${attempt}:`,
         error?.message || error
       );
 
-      // HẾT QUOTA NGÀY → KHÔNG RETRY
       if (
         status === 429 &&
         isDailyQuotaError(error)
       ) {
-        const quotaError = new Error(
-          "Gemini đã hết lượt sử dụng miễn phí hôm nay."
-        );
+        const quotaError =
+          new Error(
+            "Gemini đã hết lượt sử dụng miễn phí hôm nay."
+          );
 
         quotaError.code =
           "DAILY_QUOTA_EXCEEDED";
@@ -172,9 +216,11 @@ async function generateWithRetry(prompt) {
       const isTemporaryServerError =
         status === 503 ||
         status === 408 ||
-        (typeof status === "number" &&
+        (
+          typeof status === "number" &&
           status >= 500 &&
-          status < 600);
+          status < 600
+        );
 
       const isTemporaryRateLimit =
         status === 429 &&
@@ -206,7 +252,9 @@ async function generateWithRetry(prompt) {
       }
 
       const jitter =
-        Math.floor(Math.random() * 1000);
+        Math.floor(
+          Math.random() * 1000
+        );
 
       waitTime += jitter;
 
@@ -226,10 +274,23 @@ async function generateWithRetry(prompt) {
 }
 
 /* =========================================================
-   TEST
+   HEALTH CHECK
 ========================================================= */
 
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message:
+      "FEAR2HEAR AI server đang hoạt động.",
+    model: MODEL,
+  });
+});
+
 app.get("/api/test", (req, res) => {
+  console.log(
+    "✅ /api/test được gọi."
+  );
+
   res.json({
     success: true,
     message:
@@ -245,9 +306,25 @@ app.get("/api/test", (req, res) => {
 app.post(
   "/api/generate-questions",
   async (req, res) => {
+    console.log(
+      "========== GENERATE QUESTIONS =========="
+    );
+
     try {
-      const { topic, transcript } =
-        req.body;
+      const {
+        topic,
+        transcript,
+      } = req.body;
+
+      console.log(
+        "📌 Topic:",
+        topic
+      );
+
+      console.log(
+        "📌 Transcript length:",
+        transcript?.length || 0
+      );
 
       if (!topic) {
         return res.status(400).json({
@@ -268,6 +345,7 @@ Bạn là SAM, một AI đóng vai người phản biện
 trong nền tảng luyện tập thuyết trình FEAR2HEAR.
 
 NHIỆM VỤ:
+
 Dựa trên chủ đề và nội dung bài thuyết trình
 của người dùng, hãy tạo chính xác 4 câu hỏi
 phản biện bằng tiếng Việt.
@@ -311,17 +389,26 @@ FORMAT BẮT BUỘC:
 `;
 
       const response =
-        await generateWithRetry(prompt);
+        await generateWithRetry(
+          prompt
+        );
 
       const text =
         response.text || "";
+
+      console.log(
+        "📥 Gemini response:",
+        text
+      );
 
       const data =
         parseJson(text);
 
       if (
         !data.questions ||
-        !Array.isArray(data.questions)
+        !Array.isArray(
+          data.questions
+        )
       ) {
         throw new Error(
           "Gemini không trả về danh sách câu hỏi hợp lệ."
@@ -341,6 +428,11 @@ FORMAT BẮT BUỘC:
           "Gemini chưa tạo đủ 4 câu hỏi."
         );
       }
+
+      console.log(
+        "✅ QUESTIONS:",
+        questions
+      );
 
       return res.json({
         questions,
@@ -366,9 +458,11 @@ FORMAT BẮT BUỘC:
 
       if (
         status === 503 ||
-        (typeof status === "number" &&
+        (
+          typeof status === "number" &&
           status >= 500 &&
-          status < 600)
+          status < 600
+        )
       ) {
         return res.status(503).json({
           error:
@@ -388,6 +482,10 @@ FORMAT BẮT BUỘC:
           error?.message ||
           "Không thể tạo câu hỏi AI.",
       });
+    } finally {
+      console.log(
+        "========== END QUESTIONS =========="
+      );
     }
   }
 );
@@ -399,6 +497,10 @@ FORMAT BẮT BUỘC:
 app.post(
   "/api/generate-feedback",
   async (req, res) => {
+    console.log(
+      "========== GENERATE FEEDBACK =========="
+    );
+
     try {
       const {
         topic,
@@ -516,7 +618,9 @@ FORMAT BẮT BUỘC:
 `;
 
       const response =
-        await generateWithRetry(prompt);
+        await generateWithRetry(
+          prompt
+        );
 
       const text =
         response.text || "";
@@ -556,9 +660,11 @@ FORMAT BẮT BUỘC:
 
       if (
         status === 503 ||
-        (typeof status === "number" &&
+        (
+          typeof status === "number" &&
           status >= 500 &&
-          status < 600)
+          status < 600
+        )
       ) {
         return res.status(503).json({
           error:
@@ -578,6 +684,10 @@ FORMAT BẮT BUỘC:
           error?.message ||
           "Không thể tạo feedback AI.",
       });
+    } finally {
+      console.log(
+        "========== END FEEDBACK =========="
+      );
     }
   }
 );
@@ -587,6 +697,10 @@ FORMAT BẮT BUỘC:
 ========================================================= */
 
 app.use((req, res) => {
+  console.log(
+    `❌ 404 API không tồn tại: ${req.method} ${req.originalUrl}`
+  );
+
   res.status(404).json({
     error: "API không tồn tại.",
   });
@@ -625,6 +739,14 @@ app.listen(
 
     console.log(
       `🤖 Gemini model: ${MODEL}`
+    );
+
+    console.log(
+      `🔑 GEMINI_API_KEY: ${
+        apiKey
+          ? "ĐÃ CÓ"
+          : "KHÔNG CÓ"
+      }`
     );
   }
 );
