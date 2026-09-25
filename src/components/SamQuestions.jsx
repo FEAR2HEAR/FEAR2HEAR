@@ -8,8 +8,14 @@ export default function SamQuestions() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // =========================================================
+  // PRODUCTION API
+  // =========================================================
   const API_URL = "https://fear2hear.onrender.com";
 
+  // =========================================================
+  // LẤY DỮ LIỆU BÀI THUYẾT TRÌNH
+  // =========================================================
   const getPresentationData = () => {
     const topic =
       localStorage.getItem("presentationTopic") || "";
@@ -23,25 +29,27 @@ export default function SamQuestions() {
     };
   };
 
+  // =========================================================
+  // GỌI AI TẠO CÂU HỎI
+  // =========================================================
   const handleReady = async () => {
     console.log("========== SAM START ==========");
 
     setError("");
 
-    const { topic, transcript } =
-      getPresentationData();
+    const { topic, transcript } = getPresentationData();
 
+    console.log("📌 API URL:", API_URL);
     console.log("📌 Topic:", topic);
     console.log("📌 Transcript:", transcript);
-    console.log(
-      "📌 Transcript length:",
-      transcript.length
-    );
+    console.log("📌 Transcript length:", transcript.length);
+
+    // -------------------------------------------------------
+    // KIỂM TRA DỮ LIỆU
+    // -------------------------------------------------------
 
     if (!topic) {
-      console.error(
-        "❌ Không có presentationTopic"
-      );
+      console.error("❌ Không có presentationTopic");
 
       setError(
         "Chưa có chủ đề bài thuyết trình."
@@ -51,9 +59,7 @@ export default function SamQuestions() {
     }
 
     if (!transcript) {
-      console.error(
-        "❌ Không có presentationTranscript"
-      );
+      console.error("❌ Không có presentationTranscript");
 
       setError(
         "Chưa có nội dung bài thuyết trình. Hãy kiểm tra lại phần ghi âm."
@@ -65,23 +71,29 @@ export default function SamQuestions() {
     setLoading(true);
 
     try {
-      console.log(
-        "🚀 ĐANG GỌI SERVER..."
-      );
+      // -----------------------------------------------------
+      // GỌI SERVER RENDER
+      // -----------------------------------------------------
 
-     const response = await fetch(
-  `${API_URL}/api/generate-questions`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      topic,
-      transcript,
-    }),
-  }
-);
+      const endpoint =
+        `${API_URL}/api/generate-questions`;
+
+      console.log("🚀 ĐANG GỌI SERVER:");
+      console.log(endpoint);
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          topic,
+          transcript,
+        }),
+      });
+
       console.log(
         "📡 Server status:",
         response.status
@@ -92,19 +104,54 @@ export default function SamQuestions() {
         response.ok
       );
 
-      const data = await response.json();
+      // -----------------------------------------------------
+      // ĐỌC RESPONSE AN TOÀN
+      // -----------------------------------------------------
+
+      const responseText =
+        await response.text();
 
       console.log(
-        "📥 SERVER TRẢ VỀ:",
+        "📥 RAW SERVER RESPONSE:",
+        responseText
+      );
+
+      let data = {};
+
+      try {
+        data = responseText
+          ? JSON.parse(responseText)
+          : {};
+      } catch (jsonError) {
+        console.error(
+          "❌ Không parse được JSON:",
+          jsonError
+        );
+
+        throw new Error(
+          `Server trả về dữ liệu không hợp lệ. HTTP ${response.status}`
+        );
+      }
+
+      console.log(
+        "📥 SERVER DATA:",
         data
       );
 
+      // -----------------------------------------------------
+      // SERVER BÁO LỖI
+      // -----------------------------------------------------
+
       if (!response.ok) {
         throw new Error(
-          data.error ||
-            `Server trả về lỗi ${response.status}`
+          data?.error ||
+          `Server trả về lỗi HTTP ${response.status}`
         );
       }
+
+      // -----------------------------------------------------
+      // KIỂM TRA DANH SÁCH CÂU HỎI
+      // -----------------------------------------------------
 
       if (!Array.isArray(data.questions)) {
         throw new Error(
@@ -118,65 +165,73 @@ export default function SamQuestions() {
         );
       }
 
+      // -----------------------------------------------------
+      // LƯU CÂU HỎI
+      // -----------------------------------------------------
+
+      const questions =
+        data.questions
+          .slice(0, 4)
+          .map((question) =>
+            String(question).trim()
+          )
+          .filter(Boolean);
+
+      if (questions.length !== 4) {
+        throw new Error(
+          "Danh sách câu hỏi AI trả về không hợp lệ."
+        );
+      }
+
       console.log(
-        "✅ AI tạo đủ 4 câu hỏi:"
+        "✅ 4 CÂU HỎI AI:",
+        questions
       );
 
-      data.questions.forEach(
-        (question, index) => {
-          console.log(
-            `Câu ${index + 1}:`,
-            question
-          );
-        }
-      );
-
-      /* ==========================================
-         TẠO ID CHO LƯỢT LUYỆN TẬP
-      ========================================== */
+      // -----------------------------------------------------
+      // TẠO ID CHO LẦN LUYỆN
+      // -----------------------------------------------------
 
       const attemptId =
-        `${Date.now()}-${Math.random()
-          .toString(36)
-          .slice(2, 8)}`;
+        `attempt_${Date.now()}`;
+
+      // -----------------------------------------------------
+      // LƯU LOCAL STORAGE
+      // -----------------------------------------------------
 
       localStorage.setItem(
         "practiceAttemptId",
         attemptId
       );
 
-      /* ==========================================
-         LƯU CÂU HỎI
-      ========================================== */
-
       localStorage.setItem(
         "samQuestions",
-        JSON.stringify(
-          data.questions.slice(0, 4)
-        )
+        JSON.stringify(questions)
       );
-
-      /* ==========================================
-         XÓA ANSWERS CŨ
-      ========================================== */
 
       localStorage.setItem(
         "samAnswers",
         JSON.stringify(
-          data.questions
-            .slice(0, 4)
-            .map(() => null)
+          questions.map(() => null)
         )
       );
 
       console.log(
-        "💾 Đã lưu samQuestions."
+        "💾 Đã lưu practiceAttemptId:",
+        attemptId
       );
 
       console.log(
-        "💾 Đã tạo practiceAttemptId:",
-        attemptId
+        "💾 Đã lưu samQuestions"
       );
+
+      console.log(
+        "💾 Đã lưu samAnswers"
+      );
+
+      // -----------------------------------------------------
+      // ĐI SANG SAM DEBATE
+      // -----------------------------------------------------
 
       console.log(
         "➡️ Chuyển sang /sam-debate"
@@ -199,14 +254,21 @@ export default function SamQuestions() {
         err
       );
 
-      if (err instanceof TypeError) {
+      // -----------------------------------------------------
+      // LỖI KẾT NỐI
+      // -----------------------------------------------------
+
+      if (
+        err instanceof TypeError &&
+        err?.message === "Failed to fetch"
+      ) {
         setError(
-          "Không kết nối được với AI server. Hãy kiểm tra lại kết nối mạng hoặc server Render."
+          "Không kết nối được với AI server. Hãy kiểm tra kết nối mạng hoặc server Render."
         );
       } else {
         setError(
           err?.message ||
-            "Không thể tạo câu hỏi AI lúc này."
+          "Không thể tạo câu hỏi AI lúc này."
         );
       }
 
@@ -219,47 +281,38 @@ export default function SamQuestions() {
     }
   };
 
+  // =========================================================
+  // UI
+  // =========================================================
+
   return (
     <div className="sam-questions-page">
 
-      <div className="sam-questions-logo">
-        FEAR2HEAR
-      </div>
+      <div className="sam-questions-card">
 
-      <div className="sam-questions-content">
+        <h1>
+          SAM
+        </h1>
 
-        <div className="sam-questions-message">
-
-          <div className="sam-questions-title">
-            <span className="sam-questions-alarm">
-              ⏰
-            </span>
-
-            <span>
-              HẾT THỜI GIAN!
-            </span>
-          </div>
-
-          <div className="sam-questions-subtitle">
-            Bạn đã sẵn sàng để trả lời những câu hỏi từ SAM chưa?
-          </div>
-
-        </div>
+        <p>
+          AI đã sẵn sàng đặt câu hỏi cho
+          bài thuyết trình của bạn.
+        </p>
 
         {error && (
-          <div className="sam-questions-error">
+          <div className="sam-error">
             {error}
           </div>
         )}
 
         <button
-          className="sam-questions-ready-btn"
+          className="sam-ready-btn"
           onClick={handleReady}
           disabled={loading}
         >
           {loading
-            ? "SAM ĐANG CHUẨN BỊ..."
-            : "SẴN SÀNG"}
+            ? "AI đang suy nghĩ..."
+            : "Sẵn sàng"}
         </button>
 
       </div>
