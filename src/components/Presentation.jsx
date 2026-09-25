@@ -86,18 +86,6 @@ export default function Presentation() {
     useState(false);
 
   // =======================================================
-  // MICROPHONE
-  // =======================================================
-
-  const microphoneStreamRef = useRef(null);
-
-  const [microphoneReady, setMicrophoneReady] =
-    useState(false);
-
-  const [microphoneError, setMicrophoneError] =
-    useState("");
-
-  // =======================================================
   // SPEECH TO TEXT
   // =======================================================
 
@@ -114,6 +102,9 @@ export default function Presentation() {
     useRef("");
 
   const shouldRestartRecognitionRef =
+    useRef(false);
+
+  const presentationFinishedRef =
     useRef(false);
 
   const [speechListening, setSpeechListening] =
@@ -330,6 +321,11 @@ export default function Presentation() {
   const [presentationFinished, setPresentationFinished] =
     useState(false);
 
+  useEffect(() => {
+    presentationFinishedRef.current =
+      presentationFinished;
+  }, [presentationFinished]);
+
   // =======================================================
   // CAMERA
   // =======================================================
@@ -391,72 +387,6 @@ export default function Presentation() {
   }, []);
 
   // =======================================================
-  // MICROPHONE PERMISSION
-  // =======================================================
-
-  const requestMicrophone = async () => {
-    try {
-      setMicrophoneError("");
-
-      if (
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-      ) {
-        throw new Error(
-          "Trình duyệt không hỗ trợ microphone."
-        );
-      }
-
-      const stream =
-        await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true,
-          },
-          video: false,
-        });
-
-      microphoneStreamRef.current = stream;
-
-      setMicrophoneReady(true);
-
-      console.log(
-        "🎤 Microphone đã được cấp quyền."
-      );
-
-      return true;
-    } catch (error) {
-      console.error(
-        "Microphone permission error:",
-        error
-      );
-
-      setMicrophoneReady(false);
-
-      if (
-        error?.name === "NotAllowedError"
-      ) {
-        setMicrophoneError(
-          "Microphone đang bị chặn. Hãy cho phép Microphone cho fear2hear.vercel.app rồi tải lại trang."
-        );
-      } else if (
-        error?.name === "NotFoundError"
-      ) {
-        setMicrophoneError(
-          "Không tìm thấy microphone trên thiết bị."
-        );
-      } else {
-        setMicrophoneError(
-          "Không thể truy cập microphone."
-        );
-      }
-
-      return false;
-    }
-  };
-
-  // =======================================================
   // SPEECH RECOGNITION
   // =======================================================
 
@@ -483,27 +413,51 @@ export default function Presentation() {
 
     recognition.onstart = () => {
       recognitionRunningRef.current = true;
+
       setSpeechListening(true);
       setSpeechError("");
 
       console.log(
-        "🎙️ Speech Recognition BẮT ĐẦU."
+        "🎙️ SPEECH STARTED"
       );
     };
 
     recognition.onaudiostart = () => {
       console.log(
-        "🎤 Speech Recognition đã kết nối microphone."
+        "🎤 AUDIO STARTED"
+      );
+    };
+
+    recognition.onsoundstart = () => {
+      console.log(
+        "🔊 SOUND STARTED"
       );
     };
 
     recognition.onspeechstart = () => {
       console.log(
-        "🗣️ ĐÃ PHÁT HIỆN GIỌNG NÓI."
+        "🗣️ SPEECH STARTED - ĐÃ PHÁT HIỆN GIỌNG"
+      );
+    };
+
+    recognition.onspeechend = () => {
+      console.log(
+        "🗣️ SPEECH ENDED"
+      );
+    };
+
+    recognition.onaudioend = () => {
+      console.log(
+        "🎤 AUDIO ENDED"
       );
     };
 
     recognition.onresult = (event) => {
+      console.log(
+        "🎯 RAW SPEECH RESULT:",
+        event
+      );
+
       let interimText = "";
 
       for (
@@ -511,12 +465,22 @@ export default function Presentation() {
         i < event.results.length;
         i++
       ) {
+        const result =
+          event.results[i];
+
         const text =
-          event.results[i][0].transcript;
+          result[0]?.transcript || "";
 
         if (!text.trim()) {
           continue;
         }
+
+        console.log(
+          "📝 SPEECH TEXT:",
+          text,
+          "FINAL:",
+          result.isFinal
+        );
 
         const speechNow = Date.now();
 
@@ -541,12 +505,12 @@ export default function Presentation() {
           silenceStartedAtRef.current = null;
         }
 
-        lastSpeechAtRef.current = speechNow;
+        lastSpeechAtRef.current =
+          speechNow;
+
         setSilenceWarning(false);
 
-        if (
-          event.results[i].isFinal
-        ) {
+        if (result.isFinal) {
           finalTranscriptRef.current +=
             text + " ";
 
@@ -593,32 +557,37 @@ export default function Presentation() {
 
     recognition.onerror = (event) => {
       console.error(
-        "🎙️ Speech Recognition error:",
-        event.error
+        "❌ SPEECH ERROR:",
+        event.error,
+        event
       );
 
-      recognitionRunningRef.current = false;
+      recognitionRunningRef.current =
+        false;
+
       setSpeechListening(false);
 
       if (
         event.error === "not-allowed" ||
-        event.error === "service-not-allowed"
+        event.error ===
+          "service-not-allowed"
       ) {
         shouldRestartRecognitionRef.current =
           false;
 
         setSpeechError(
-          "Chrome chưa cho Speech Recognition dùng microphone. Hãy kiểm tra quyền Microphone."
+          "Chrome không cho Speech Recognition sử dụng microphone. Hãy kiểm tra quyền Microphone của fear2hear.vercel.app."
         );
 
         return;
       }
 
       if (
-        event.error === "audio-capture"
+        event.error ===
+        "audio-capture"
       ) {
         setSpeechError(
-          "Chrome không lấy được microphone. Hãy kiểm tra microphone."
+          "Chrome không lấy được microphone."
         );
 
         return;
@@ -628,7 +597,7 @@ export default function Presentation() {
         event.error === "network"
       ) {
         setSpeechError(
-          "Speech Recognition không kết nối được dịch vụ nhận giọng nói. Hãy kiểm tra mạng."
+          "Speech Recognition không kết nối được dịch vụ nhận giọng nói. Hãy kiểm tra Internet."
         );
 
         return;
@@ -637,6 +606,10 @@ export default function Presentation() {
       if (
         event.error === "no-speech"
       ) {
+        console.log(
+          "ℹ️ Không phát hiện giọng nói."
+        );
+
         setSpeechError("");
 
         return;
@@ -648,22 +621,33 @@ export default function Presentation() {
     };
 
     recognition.onend = () => {
-      recognitionRunningRef.current = false;
+      console.log(
+        "🔚 SPEECH ENDED"
+      );
+
+      recognitionRunningRef.current =
+        false;
+
       setSpeechListening(false);
 
       if (
         shouldRestartRecognitionRef.current &&
-        !presentationFinished &&
+        !presentationFinishedRef.current &&
         timeLeftRef.current > 0
       ) {
         setTimeout(() => {
           if (
             !recognitionRunningRef.current &&
             shouldRestartRecognitionRef.current &&
+            !presentationFinishedRef.current &&
             timeLeftRef.current > 0
           ) {
             try {
               recognition.start();
+
+              console.log(
+                "🔄 SPEECH RESTARTED"
+              );
             } catch (error) {
               console.log(
                 "Recognition restart:",
@@ -671,7 +655,7 @@ export default function Presentation() {
               );
             }
           }
-        }, 500);
+        }, 300);
       }
     };
 
@@ -691,23 +675,26 @@ export default function Presentation() {
 
       recognitionRef.current = null;
     };
-  }, [presentationFinished]);
+  }, []);
 
   // =======================================================
   // START SPEECH
   // =======================================================
 
   const startSpeechRecognition =
-    async () => {
+    () => {
       setSpeechError("");
 
-      if (!microphoneReady) {
-        const allowed =
-          await requestMicrophone();
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
-        if (!allowed) {
-          return;
-        }
+      if (!SpeechRecognition) {
+        setSpeechError(
+          "Trình duyệt không hỗ trợ nhận giọng nói."
+        );
+
+        return;
       }
 
       const recognition =
@@ -724,6 +711,10 @@ export default function Presentation() {
       if (
         recognitionRunningRef.current
       ) {
+        console.log(
+          "🎙️ Speech Recognition đang chạy."
+        );
+
         return;
       }
 
@@ -734,11 +725,11 @@ export default function Presentation() {
         recognition.start();
 
         console.log(
-          "🎙️ Đã yêu cầu Speech Recognition bắt đầu."
+          "🎙️ ĐÃ GỌI recognition.start()"
         );
       } catch (error) {
         console.error(
-          "Không thể start Speech Recognition:",
+          "❌ Không thể start Speech Recognition:",
           error
         );
 
@@ -746,13 +737,12 @@ export default function Presentation() {
           error?.name ===
           "InvalidStateError"
         ) {
-          recognitionRunningRef.current =
-            true;
-
-          setSpeechListening(true);
+          console.log(
+            "Speech Recognition đã đang chạy."
+          );
         } else {
           setSpeechError(
-            "Không thể bật nhận giọng nói. Hãy bấm lại nút một lần nữa."
+            "Không thể bật nhận giọng nói. Hãy bấm lại nút."
           );
         }
       }
@@ -763,7 +753,8 @@ export default function Presentation() {
   // =======================================================
 
   useEffect(() => {
-    timeLeftRef.current = timeLeft;
+    timeLeftRef.current =
+      timeLeft;
   }, [timeLeft]);
 
   // =======================================================
@@ -1310,12 +1301,6 @@ export default function Presentation() {
         .forEach((track) => track.stop());
     }
 
-    if (microphoneStreamRef.current) {
-      microphoneStreamRef.current
-        .getTracks()
-        .forEach((track) => track.stop());
-    }
-
     const redirectTimer =
       setTimeout(() => {
         const finalText =
@@ -1366,6 +1351,9 @@ export default function Presentation() {
     setShowFinishConfirm(false);
 
     setPresentationFinished(true);
+    presentationFinishedRef.current =
+      true;
+
     setSilenceWarning(false);
     setFillerWarning(false);
     setGazeWarning(false);
@@ -1381,12 +1369,6 @@ export default function Presentation() {
 
     if (streamRef.current) {
       streamRef.current
-        .getTracks()
-        .forEach((track) => track.stop());
-    }
-
-    if (microphoneStreamRef.current) {
-      microphoneStreamRef.current
         .getTracks()
         .forEach((track) => track.stop());
     }
@@ -1503,7 +1485,8 @@ export default function Presentation() {
               position: "fixed",
               top: "105px",
               left: "50%",
-              transform: "translateX(-50%)",
+              transform:
+                "translateX(-50%)",
               zIndex: 151,
               padding: "8px 18px",
               border: "none",
@@ -1527,8 +1510,8 @@ export default function Presentation() {
           </button>
         )}
 
-      {/* MICROPHONE ERROR */}
-      {(speechError || microphoneError) &&
+      {/* SPEECH ERROR */}
+      {speechError &&
         !presentationFinished &&
         timeLeft > 0 && (
           <div
@@ -1555,7 +1538,7 @@ export default function Presentation() {
                 "0 10px 30px rgba(0,0,0,0.35)",
             }}
           >
-            🎙️ {speechError || microphoneError}
+            🎙️ {speechError}
           </div>
         )}
 
