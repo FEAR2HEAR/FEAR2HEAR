@@ -104,11 +104,11 @@ export default function Presentation() {
   const shouldRestartRecognitionRef =
     useRef(false);
 
+  const recognitionRestartTimerRef =
+    useRef(null);
+
   const presentationFinishedRef =
     useRef(false);
-
-  const speechRestartTimeoutRef =
-    useRef(null);
 
   const [speechListening, setSpeechListening] =
     useState(false);
@@ -576,23 +576,9 @@ export default function Presentation() {
 
       setSpeechListening(false);
 
-      // ===================================================
-      // ABORTED
-      // Chrome đôi khi tự abort phiên recognition.
-      // Không coi đây là lỗi chết.
-      // ===================================================
-
-      if (
-        event.error === "aborted"
-      ) {
-        console.log(
-          "ℹ️ Speech Recognition bị aborted. Sẽ thử khởi động lại."
-        );
-
-        setSpeechError("");
-
-        return;
-      }
+      // -----------------------------------------------
+      // PERMISSION
+      // -----------------------------------------------
 
       if (
         event.error === "not-allowed" ||
@@ -603,25 +589,34 @@ export default function Presentation() {
           false;
 
         setSpeechError(
-          "Chrome không cho Speech Recognition sử dụng microphone. Hãy kiểm tra quyền Microphone của fear2hear.vercel.app."
+          "Chrome không cho Speech Recognition sử dụng microphone. Hãy bấm biểu tượng 🔒 cạnh địa chỉ website và cho phép Microphone."
         );
 
         return;
       }
+
+      // -----------------------------------------------
+      // MICROPHONE
+      // -----------------------------------------------
 
       if (
         event.error ===
         "audio-capture"
       ) {
         setSpeechError(
-          "Chrome không lấy được microphone."
+          "Chrome không lấy được microphone. Hãy kiểm tra microphone của máy."
         );
 
         return;
       }
 
+      // -----------------------------------------------
+      // NETWORK
+      // -----------------------------------------------
+
       if (
-        event.error === "network"
+        event.error ===
+        "network"
       ) {
         setSpeechError(
           "Speech Recognition không kết nối được dịch vụ nhận giọng nói. Hãy kiểm tra Internet."
@@ -630,11 +625,33 @@ export default function Presentation() {
         return;
       }
 
+      // -----------------------------------------------
+      // NO SPEECH
+      // -----------------------------------------------
+
       if (
-        event.error === "no-speech"
+        event.error ===
+        "no-speech"
       ) {
         console.log(
-          "ℹ️ Không phát hiện giọng nói."
+          "ℹ️ Chrome không phát hiện giọng nói."
+        );
+
+        setSpeechError("");
+
+        return;
+      }
+
+      // -----------------------------------------------
+      // ABORTED
+      // -----------------------------------------------
+
+      if (
+        event.error ===
+        "aborted"
+      ) {
+        console.log(
+          "ℹ️ Speech Recognition bị aborted, sẽ thử khởi động lại."
         );
 
         setSpeechError("");
@@ -658,10 +675,10 @@ export default function Presentation() {
       setSpeechListening(false);
 
       if (
-        speechRestartTimeoutRef.current
+        recognitionRestartTimerRef.current
       ) {
         clearTimeout(
-          speechRestartTimeoutRef.current
+          recognitionRestartTimerRef.current
         );
       }
 
@@ -670,7 +687,7 @@ export default function Presentation() {
         !presentationFinishedRef.current &&
         timeLeftRef.current > 0
       ) {
-        speechRestartTimeoutRef.current =
+        recognitionRestartTimerRef.current =
           setTimeout(() => {
             if (
               !recognitionRunningRef.current &&
@@ -706,13 +723,13 @@ export default function Presentation() {
         false;
 
       if (
-        speechRestartTimeoutRef.current
+        recognitionRestartTimerRef.current
       ) {
         clearTimeout(
-          speechRestartTimeoutRef.current
+          recognitionRestartTimerRef.current
         );
 
-        speechRestartTimeoutRef.current =
+        recognitionRestartTimerRef.current =
           null;
       }
 
@@ -966,18 +983,15 @@ export default function Presentation() {
 
   // =======================================================
   // FACE LANDMARK + NHÌN CAMERA
-  // =======================================================
-  //
   // QUAN TRỌNG:
-  // Không để timeLeft trong dependency.
-  // Nếu có timeLeft ở đây, FaceLandmarker sẽ bị
-  // destroy + tạo lại mỗi giây.
+  // - CHỈ KHỞI TẠO 1 LẦN
+  // - KHÔNG DÙNG GPU
+  // - KHÔNG PHỤ THUỘC timeLeft
   // =======================================================
 
   useEffect(() => {
     if (
-      presentationFinished ||
-      timeLeft <= 0
+      presentationFinished
     ) {
       return;
     }
@@ -989,6 +1003,10 @@ export default function Presentation() {
 
     async function setupFaceTracking() {
       try {
+        console.log(
+          "👀 Đang khởi tạo FaceLandmarker..."
+        );
+
         const vision =
           await FilesetResolver.forVisionTasks(
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm"
@@ -998,23 +1016,31 @@ export default function Presentation() {
           return;
         }
 
-        const options = {
-          baseOptions: {
-            modelAssetPath:
-              "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
-            delegate: "CPU",
-          },
-          runningMode: "VIDEO",
-          numFaces: 1,
-          minFaceDetectionConfidence: 0.5,
-          minFacePresenceConfidence: 0.5,
-          minTrackingConfidence: 0.5,
-        };
-
+        /*
+         * QUAN TRỌNG:
+         * Dùng CPU để tránh MediaPipe tranh WebGL
+         * với Three.js.
+         */
         faceLandmarker =
           await FaceLandmarker.createFromOptions(
             vision,
-            options
+            {
+              baseOptions: {
+                modelAssetPath:
+                  "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+                delegate: "CPU",
+              },
+
+              runningMode: "VIDEO",
+
+              numFaces: 1,
+
+              minFaceDetectionConfidence: 0.5,
+
+              minFacePresenceConfidence: 0.5,
+
+              minTrackingConfidence: 0.5,
+            }
           );
 
         if (cancelled) {
@@ -1024,6 +1050,10 @@ export default function Presentation() {
 
           return;
         }
+
+        console.log(
+          "✅ FaceLandmarker đã sẵn sàng"
+        );
 
         function detect() {
           if (cancelled) {
@@ -1047,12 +1077,14 @@ export default function Presentation() {
           const now =
             performance.now();
 
-          // Nhận diện khuôn mặt khoảng 8 lần/giây
-          // thay vì liên tục để giảm tải CPU.
+          /*
+           * Chỉ detect khoảng 5 lần / giây.
+           * Không cần detect 60 FPS.
+           */
           if (
             now -
               lastDetectionTime <
-            125
+            200
           ) {
             return;
           }
@@ -1310,9 +1342,9 @@ export default function Presentation() {
         } catch {}
       }
     };
-
-    // KHÔNG thêm timeLeft vào đây.
-  }, [presentationFinished]);
+  }, [
+    presentationFinished,
+  ]);
 
   // =======================================================
   // HẾT GIỜ
@@ -1330,14 +1362,11 @@ export default function Presentation() {
       false;
 
     if (
-      speechRestartTimeoutRef.current
+      recognitionRestartTimerRef.current
     ) {
       clearTimeout(
-        speechRestartTimeoutRef.current
+        recognitionRestartTimerRef.current
       );
-
-      speechRestartTimeoutRef.current =
-        null;
     }
 
     if (recognitionRef.current) {
@@ -1413,13 +1442,13 @@ export default function Presentation() {
       false;
 
     if (
-      speechRestartTimeoutRef.current
+      recognitionRestartTimerRef.current
     ) {
       clearTimeout(
-        speechRestartTimeoutRef.current
+        recognitionRestartTimerRef.current
       );
 
-      speechRestartTimeoutRef.current =
+      recognitionRestartTimerRef.current =
         null;
     }
 
