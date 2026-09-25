@@ -153,6 +153,8 @@ export default function Presentation() {
   // MICROPHONE
   // =======================================================
 
+  // SpeechRecognition tự quản lý microphone.
+  // Không mở getUserMedia({ audio: true }) riêng.
   const microphoneStreamRef =
     useRef(null);
 
@@ -518,7 +520,7 @@ export default function Presentation() {
 
     if (!SpeechRecognition) {
       setSpeechError(
-        "Trình duyệt này không hỗ trợ nhận giọng nói. Hãy dùng Google Chrome."
+        "Trình duyệt này không hỗ trợ nhận giọng nói. Hãy dùng Google Chrome hoặc Microsoft Edge."
       );
 
       return;
@@ -659,7 +661,7 @@ export default function Presentation() {
           false;
 
         setSpeechError(
-          "Chrome đang chặn microphone. Hãy bấm biểu tượng 🔒 cạnh địa chỉ website → Microphone → Allow → tải lại trang."
+          "Trình duyệt đang chặn microphone. Hãy cho phép Microphone cho website rồi tải lại trang."
         );
 
         return;
@@ -680,7 +682,7 @@ export default function Presentation() {
         event.error === "network"
       ) {
         setSpeechError(
-          "Chrome không kết nối được dịch vụ nhận giọng nói. Hãy kiểm tra Internet rồi bấm lại."
+          "Không kết nối được dịch vụ nhận giọng nói. Hãy kiểm tra Internet."
         );
 
         return;
@@ -815,7 +817,7 @@ export default function Presentation() {
 
       if (!SpeechRecognition) {
         setSpeechError(
-          "Hãy mở website bằng Google Chrome để sử dụng nhận giọng nói."
+          "Hãy mở website bằng Google Chrome hoặc Microsoft Edge để sử dụng nhận giọng nói."
         );
 
         return;
@@ -843,63 +845,18 @@ export default function Presentation() {
       }
 
       // ===================================================
-      // XIN QUYỀN MICROPHONE
+      // MICROPHONE
+      // ===================================================
+      // KHÔNG gọi getUserMedia({ audio: true }) ở đây.
+      //
+      // SpeechRecognition tự quản lý microphone.
+      // Việc mở thêm một audio stream riêng có thể
+      // gây tranh chấp microphone với SpeechRecognition.
       // ===================================================
 
-      try {
-        if (
-          !navigator.mediaDevices ||
-          !navigator.mediaDevices
-            .getUserMedia
-        ) {
-          throw new Error(
-            "Microphone API không được hỗ trợ."
-          );
-        }
-
-        const micStream =
-          await navigator.mediaDevices.getUserMedia(
-            {
-              audio: true,
-              video: false,
-            }
-          );
-
-        // Giữ microphone stream mở
-        // trong lúc trình bày.
-        microphoneStreamRef.current =
-          micStream;
-
-        console.log(
-          "🎤 MICROPHONE PERMISSION OK"
-        );
-
-        console.log(
-          "🎤 MIC TRACKS:",
-          micStream
-            .getAudioTracks()
-            .map(
-              (track) => ({
-                label: track.label,
-                enabled:
-                  track.enabled,
-                readyState:
-                  track.readyState,
-              })
-            )
-        );
-      } catch (error) {
-        console.error(
-          "❌ Microphone permission error:",
-          error
-        );
-
-        setSpeechError(
-          "Không thể truy cập microphone. Hãy cho phép Microphone trong Chrome rồi bấm lại."
-        );
-
-        return;
-      }
+      console.log(
+        "🎤 Chuẩn bị bật Speech Recognition..."
+      );
 
       shouldRestartRecognitionRef.current =
         true;
@@ -1179,8 +1136,6 @@ export default function Presentation() {
                 modelAssetPath:
                   "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
 
-                // CPU để tránh tranh WebGL
-                // với Three.js.
                 delegate: "CPU",
               },
 
@@ -1232,7 +1187,6 @@ export default function Presentation() {
           const now =
             performance.now();
 
-          // Chỉ detect khoảng 5 FPS
           if (
             now -
               lastDetectionTime <
@@ -1564,18 +1518,8 @@ export default function Presentation() {
       } catch {}
     }
 
-    if (
-      microphoneStreamRef.current
-    ) {
-      microphoneStreamRef.current
-        .getTracks()
-        .forEach((track) =>
-          track.stop()
-        );
-
-      microphoneStreamRef.current =
-        null;
-    }
+    // SpeechRecognition tự quản lý microphone,
+    // nên không có audio stream riêng cần stop.
 
     if (streamRef.current) {
       streamRef.current
@@ -1667,18 +1611,8 @@ export default function Presentation() {
       } catch {}
     }
 
-    if (
-      microphoneStreamRef.current
-    ) {
-      microphoneStreamRef.current
-        .getTracks()
-        .forEach((track) =>
-          track.stop()
-        );
-
-      microphoneStreamRef.current =
-        null;
-    }
+    // Không stop audio stream riêng nữa vì
+    // SpeechRecognition tự quản lý microphone.
 
     if (streamRef.current) {
       streamRef.current
@@ -1766,7 +1700,6 @@ export default function Presentation() {
         FEAR2HEAR
       </div>
 
-
       {/* TIMER */}
 
       <div
@@ -1795,7 +1728,6 @@ export default function Presentation() {
           {formatTime(timeLeft)}
         </div>
       </div>
-
 
       {/* MICROPHONE BUTTON */}
 
@@ -1838,7 +1770,6 @@ export default function Presentation() {
           </button>
         )}
 
-
       {/* SPEECH ERROR */}
 
       {speechError &&
@@ -1872,7 +1803,6 @@ export default function Presentation() {
             🎙️ {speechError}
           </div>
         )}
-
 
       {/* WARNING */}
 
@@ -1929,7 +1859,6 @@ export default function Presentation() {
           </div>
         )}
 
-
       {/* SAM */}
 
       <div className="presentation-sam-box">
@@ -1968,7 +1897,6 @@ export default function Presentation() {
         </Canvas>
       </div>
 
-
       {/* CAMERA */}
 
       <div className="presentation-camera-box">
@@ -1988,7 +1916,6 @@ export default function Presentation() {
           />
         )}
       </div>
-
 
       {/* SAM TEXT */}
 
@@ -2014,7 +1941,6 @@ export default function Presentation() {
         </div>
       </div>
 
-
       {/* SCRIPT */}
 
       <div
@@ -2035,7 +1961,6 @@ export default function Presentation() {
           </div>
         )}
       </div>
-
 
       {/* HOÀN THÀNH */}
 
@@ -2070,7 +1995,6 @@ export default function Presentation() {
             HOÀN THÀNH
           </button>
         )}
-
 
       {/* CONFIRM MODAL */}
 
@@ -2188,7 +2112,6 @@ export default function Presentation() {
           </div>
         </div>
       )}
-
 
       {/* KẾT THÚC */}
 
