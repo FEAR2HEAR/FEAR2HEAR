@@ -8,14 +8,8 @@ export default function SamQuestions() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // =========================================================
-  // FEAR2HEAR AI SERVER
-  // =========================================================
   const API_URL = "https://fear2hear.onrender.com";
 
-  // =========================================================
-  // LẤY DỮ LIỆU BÀI THUYẾT TRÌNH
-  // =========================================================
   const getPresentationData = () => {
     const topic =
       localStorage.getItem("presentationTopic") || "";
@@ -29,9 +23,6 @@ export default function SamQuestions() {
     };
   };
 
-  // =========================================================
-  // GỌI AI TẠO 4 CÂU HỎI
-  // =========================================================
   const handleReady = async () => {
     console.log("========== SAM START ==========");
 
@@ -40,9 +31,21 @@ export default function SamQuestions() {
     const { topic, transcript } =
       getPresentationData();
 
+    const endpoint =
+      `${API_URL}/api/generate-questions`;
+
+    console.log(
+      "🚀 ĐANG GỌI SERVER..."
+    );
+
     console.log(
       "🌐 AI SERVER:",
       API_URL
+    );
+
+    console.log(
+      "🚀 POST:",
+      endpoint
     );
 
     console.log(
@@ -55,67 +58,30 @@ export default function SamQuestions() {
       transcript.length
     );
 
-    // -------------------------------------------------------
-    // KIỂM TRA CHỦ ĐỀ
-    // -------------------------------------------------------
-
     if (!topic) {
-      console.error(
-        "❌ Không có presentationTopic"
-      );
-
       setError(
         "Chưa có chủ đề bài thuyết trình."
       );
-
       return;
     }
 
-    // -------------------------------------------------------
-    // KIỂM TRA TRANSCRIPT
-    // -------------------------------------------------------
-
     if (!transcript) {
-      console.error(
-        "❌ Không có presentationTranscript"
-      );
-
       setError(
         "Chưa có nội dung bài thuyết trình. Hãy kiểm tra lại phần ghi âm."
       );
-
       return;
     }
 
     setLoading(true);
 
     try {
-      // =====================================================
-      // URL API
-      // =====================================================
-
-      const endpoint =
-        `${API_URL}/api/generate-questions`;
-
-      console.log(
-        "🚀 POST:",
-        endpoint
-      );
-
-      // =====================================================
-      // GỌI SERVER
-      // =====================================================
-
       const response = await fetch(
         endpoint,
         {
           method: "POST",
-
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
-
           body: JSON.stringify({
             topic,
             transcript,
@@ -127,10 +93,6 @@ export default function SamQuestions() {
         "📡 HTTP STATUS:",
         response.status
       );
-
-      // =====================================================
-      // ĐỌC RESPONSE
-      // =====================================================
 
       const responseText =
         await response.text();
@@ -152,28 +114,12 @@ export default function SamQuestions() {
         );
       }
 
-      // =====================================================
-      // SERVER TRẢ LỖI
-      // =====================================================
-
       if (!response.ok) {
-        const serverError =
-          data?.error ||
-          `Server trả về lỗi HTTP ${response.status}`;
-
-        console.error(
-          "❌ SERVER ERROR:",
-          serverError
-        );
-
         throw new Error(
-          serverError
+          data?.error ||
+            `Server trả về lỗi HTTP ${response.status}`
         );
       }
-
-      // =====================================================
-      // KIỂM TRA QUESTIONS
-      // =====================================================
 
       if (
         !Array.isArray(
@@ -192,10 +138,6 @@ export default function SamQuestions() {
           `AI trả về ${data.questions.length} câu hỏi thay vì 4 câu.`
         );
       }
-
-      // =====================================================
-      // LÀM SẠCH CÂU HỎI
-      // =====================================================
 
       const questions =
         data.questions
@@ -218,16 +160,8 @@ export default function SamQuestions() {
         questions
       );
 
-      // =====================================================
-      // TẠO ID LẦN LUYỆN
-      // =====================================================
-
       const attemptId =
         `attempt_${Date.now()}`;
-
-      // =====================================================
-      // LƯU QUESTIONS
-      // =====================================================
 
       localStorage.setItem(
         "practiceAttemptId",
@@ -236,17 +170,13 @@ export default function SamQuestions() {
 
       localStorage.setItem(
         "samQuestions",
-        JSON.stringify(
-          questions
-        )
+        JSON.stringify(questions)
       );
 
       localStorage.setItem(
         "samAnswers",
         JSON.stringify(
-          questions.map(
-            () => null
-          )
+          questions.map(() => null)
         )
       );
 
@@ -260,25 +190,15 @@ export default function SamQuestions() {
         questions
       );
 
-      // =====================================================
-      // CHUYỂN SANG SAM DEBATE
-      // =====================================================
-
       console.log(
         "➡️ Navigate /sam-debate"
       );
 
-      navigate(
-        "/sam-debate"
-      );
+      navigate("/sam-debate");
 
     } catch (err) {
-      // =====================================================
-      // XỬ LÝ LỖI
-      // =====================================================
-
       console.error(
-        "❌ GENERATE QUESTIONS ERROR"
+        "❌ GENERATE QUESTIONS ERROR:"
       );
 
       console.error(
@@ -291,22 +211,17 @@ export default function SamQuestions() {
         err
       );
 
-      // -----------------------------------------------------
-      // KHÔNG KẾT NỐI ĐƯỢC SERVER
-      // -----------------------------------------------------
-
       if (
         err instanceof TypeError &&
-        err.message ===
-          "Failed to fetch"
+        err.message === "Failed to fetch"
       ) {
         setError(
-          "Không kết nối được với AI server Render. Vui lòng kiểm tra kết nối mạng."
+          "Không kết nối được với AI server Render. Vui lòng thử lại."
         );
       } else {
         setError(
           err?.message ||
-          "Không thể tạo câu hỏi AI lúc này."
+            "Không thể tạo câu hỏi AI lúc này."
         );
       }
 
@@ -318,10 +233,6 @@ export default function SamQuestions() {
       );
     }
   };
-
-  // =========================================================
-  // UI
-  // =========================================================
 
   return (
     <div className="sam-questions-page">
