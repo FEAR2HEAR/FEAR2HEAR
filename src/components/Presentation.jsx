@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Canvas } from "@react-three/fiber";
-import { Bounds, useGLTF } from "@react-three/drei";
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
 import {
   FaceLandmarker,
   FilesetResolver,
 } from "@mediapipe/tasks-vision";
+import { Canvas } from "@react-three/fiber";
+import { Bounds, useGLTF } from "@react-three/drei";
+import { auth } from "../firebase";
 import "../App.css";
 
 // =========================================================
@@ -35,12 +39,17 @@ function formatTime(totalSeconds) {
     Number(totalSeconds) || 0
   );
 
-  const minutes = Math.floor(safeSeconds / 60);
-  const seconds = safeSeconds % 60;
+  const minutes = Math.floor(
+    safeSeconds / 60
+  );
 
-  return `${String(minutes).padStart(2, "0")}:${String(
-    seconds
-  ).padStart(2, "0")}`;
+  const seconds =
+    safeSeconds % 60;
+
+  return `${String(minutes).padStart(
+    2,
+    "0"
+  )}:${String(seconds).padStart(2, "0")}`;
 }
 
 // =========================================================
@@ -51,42 +60,104 @@ export default function Presentation() {
   const navigate = useNavigate();
 
   // =======================================================
+  // FIREBASE USER
+  // =======================================================
+
+  const [firebaseUser, setFirebaseUser] =
+    useState(null);
+
+  const [authChecking, setAuthChecking] =
+    useState(true);
+
+  // =======================================================
+  // FIREBASE AUTH CHECK
+  // =======================================================
+
+  useEffect(() => {
+    const unsubscribe =
+      onAuthStateChanged(
+        auth,
+        (user) => {
+          console.log(
+            "🔥 Firebase auth state:",
+            user
+          );
+
+          if (!user) {
+            console.log(
+              "❌ Không có Firebase user"
+            );
+
+            navigate("/login", {
+              replace: true,
+            });
+
+            return;
+          }
+
+          console.log(
+            "✅ Firebase user:",
+            user.email
+          );
+
+          setFirebaseUser(user);
+          setAuthChecking(false);
+        }
+      );
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigate]);
+
+  // =======================================================
   // TOPIC + TIME
   // =======================================================
 
   const topic =
-    localStorage.getItem("presentationTopic") ||
-    "Chưa có chủ đề";
+    localStorage.getItem(
+      "presentationTopic"
+    ) || "Chưa có chủ đề";
 
   const savedMinutes =
     Number(
-      localStorage.getItem("presentationMinutes")
+      localStorage.getItem(
+        "presentationMinutes"
+      )
     ) || 5;
 
   // =======================================================
   // TIMER
   // =======================================================
 
-  const [timeLeft, setTimeLeft] = useState(
-    savedMinutes * 60
-  );
+  const [timeLeft, setTimeLeft] =
+    useState(savedMinutes * 60);
 
-  const timeLeftRef = useRef(
-    savedMinutes * 60
-  );
+  const timeLeftRef =
+    useRef(savedMinutes * 60);
 
   // =======================================================
   // CAMERA
   // =======================================================
 
-  const videoRef = useRef(null);
-  const streamRef = useRef(null);
+  const videoRef =
+    useRef(null);
+
+  const streamRef =
+    useRef(null);
 
   const [cameraError, setCameraError] =
     useState(false);
 
   // =======================================================
-  // SPEECH TO TEXT
+  // MICROPHONE
+  // =======================================================
+
+  const microphoneStreamRef =
+    useRef(null);
+
+  // =======================================================
+  // SPEECH RECOGNITION
   // =======================================================
 
   const [transcript, setTranscript] =
@@ -107,14 +178,23 @@ export default function Presentation() {
   const recognitionRestartTimerRef =
     useRef(null);
 
-  const presentationFinishedRef =
-    useRef(false);
-
   const [speechListening, setSpeechListening] =
     useState(false);
 
   const [speechError, setSpeechError] =
     useState("");
+
+  // =======================================================
+  // PRESENTATION FINISHED
+  // =======================================================
+
+  const [
+    presentationFinished,
+    setPresentationFinished,
+  ] = useState(false);
+
+  const presentationFinishedRef =
+    useRef(false);
 
   // =======================================================
   // SILENCE
@@ -123,28 +203,80 @@ export default function Presentation() {
   const lastSpeechAtRef =
     useRef(Date.now());
 
-  const [silenceWarning, setSilenceWarning] =
-    useState(false);
+  const [
+    silenceWarning,
+    setSilenceWarning,
+  ] = useState(false);
+
+  const silenceStartedAtRef =
+    useRef(null);
 
   // =======================================================
-  // FILLER / ẤP ÚNG
+  // FILLER
   // =======================================================
 
   const fillerTimesRef =
     useRef([]);
 
-  const [fillerWarning, setFillerWarning] =
-    useState(false);
+  const [
+    fillerWarning,
+    setFillerWarning,
+  ] = useState(false);
 
   // =======================================================
-  // KIỂM SOÁT NỘI DUNG
+  // CONTENT
   // =======================================================
 
-  const [contentWarning, setContentWarning] =
-    useState(false);
+  const [
+    contentWarning,
+    setContentWarning,
+  ] = useState(false);
 
   const topicKeywordsRef =
     useRef([]);
+
+  // =======================================================
+  // GAZE
+  // =======================================================
+
+  const [
+    gazeWarning,
+    setGazeWarning,
+  ] = useState(false);
+
+  const lookingAwaySinceRef =
+    useRef(null);
+
+  const gazeStartedAtRef =
+    useRef(null);
+
+  // =======================================================
+  // PERFORMANCE
+  // =======================================================
+
+  const performanceMetricsRef =
+    useRef({
+      silenceCount: 0,
+      totalSilenceDuration: 0,
+      maxSilenceDuration: 0,
+      gazeAwayCount: 0,
+      totalGazeAwayDuration: 0,
+      maxGazeAwayDuration: 0,
+      fillerCount: 0,
+    });
+
+  // =======================================================
+  // FINISH MODAL
+  // =======================================================
+
+  const [
+    showFinishConfirm,
+    setShowFinishConfirm,
+  ] = useState(false);
+
+  // =======================================================
+  // TOPIC KEYWORDS
+  // =======================================================
 
   useEffect(() => {
     const stopWords = new Set([
@@ -187,100 +319,60 @@ export default function Presentation() {
       "was",
     ]);
 
-    topicKeywordsRef.current = topic
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s]/g, " ")
-      .split(/\s+/)
-      .filter(
-        (word) =>
-          word.length >= 3 &&
-          !stopWords.has(word)
-      );
+    topicKeywordsRef.current =
+      topic
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        )
+        .replace(
+          /[^a-z0-9\s]/g,
+          " "
+        )
+        .split(/\s+/)
+        .filter(
+          (word) =>
+            word.length >= 3 &&
+            !stopWords.has(word)
+        );
   }, [topic]);
 
   // =======================================================
-  // EYE / CAMERA
+  // SAVE PERFORMANCE
   // =======================================================
 
-  const lookingAwaySinceRef =
-    useRef(null);
-
-  const [gazeWarning, setGazeWarning] =
-    useState(false);
-
-  // =======================================================
-  // PERFORMANCE METRICS
-  // =======================================================
-
-  const silenceStartedAtRef =
-    useRef(null);
-
-  const gazeStartedAtRef =
-    useRef(null);
-
-  const performanceMetricsRef =
-    useRef({
-      silenceCount: 0,
-      totalSilenceDuration: 0,
-      maxSilenceDuration: 0,
-      gazeAwayCount: 0,
-      totalGazeAwayDuration: 0,
-      maxGazeAwayDuration: 0,
-      fillerCount: 0,
-    });
-
-  const closePresentationPerformanceIntervals =
+  const savePresentationPerformance =
     () => {
       const now = Date.now();
 
+      let totalSilenceDuration =
+        performanceMetricsRef.current
+          .totalSilenceDuration;
+
+      let maxSilenceDuration =
+        performanceMetricsRef.current
+          .maxSilenceDuration;
+
       if (
-        silenceStartedAtRef.current !== null
+        silenceStartedAtRef.current !==
+        null
       ) {
         const duration =
           (now -
             silenceStartedAtRef.current) /
           1000;
 
-        performanceMetricsRef.current.totalSilenceDuration +=
+        totalSilenceDuration +=
           Math.max(0, duration);
 
-        performanceMetricsRef.current.maxSilenceDuration =
+        maxSilenceDuration =
           Math.max(
-            performanceMetricsRef.current
-              .maxSilenceDuration,
+            maxSilenceDuration,
             Math.max(0, duration)
           );
-
-        silenceStartedAtRef.current = null;
       }
-
-      if (
-        gazeStartedAtRef.current !== null
-      ) {
-        const duration =
-          (now -
-            gazeStartedAtRef.current) /
-          1000;
-
-        performanceMetricsRef.current.totalGazeAwayDuration +=
-          Math.max(0, duration);
-
-        performanceMetricsRef.current.maxGazeAwayDuration =
-          Math.max(
-            performanceMetricsRef.current
-              .maxGazeAwayDuration,
-            Math.max(0, duration)
-          );
-
-        gazeStartedAtRef.current = null;
-      }
-    };
-
-  const savePresentationPerformance =
-    () => {
-      closePresentationPerformanceIntervals();
 
       localStorage.setItem(
         "presentationPerformanceMetrics",
@@ -289,45 +381,48 @@ export default function Presentation() {
 
           totalSilenceDuration:
             Number(
-              performanceMetricsRef.current
-                .totalSilenceDuration.toFixed(1)
+              totalSilenceDuration.toFixed(
+                1
+              )
             ),
 
           maxSilenceDuration:
             Number(
-              performanceMetricsRef.current
-                .maxSilenceDuration.toFixed(1)
-            ),
-
-          totalGazeAwayDuration:
-            Number(
-              performanceMetricsRef.current
-                .totalGazeAwayDuration.toFixed(1)
-            ),
-
-          maxGazeAwayDuration:
-            Number(
-              performanceMetricsRef.current
-                .maxGazeAwayDuration.toFixed(1)
+              maxSilenceDuration.toFixed(
+                1
+              )
             ),
         })
       );
     };
 
   // =======================================================
-  // FINISH
+  // FIREBASE AUTH WAIT
   // =======================================================
 
-  const [showFinishConfirm, setShowFinishConfirm] =
-    useState(false);
+  if (authChecking) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "#10051d",
+          color: "#ffffff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily:
+            '"Noto Sans", sans-serif',
+          fontSize: "18px",
+        }}
+      >
+        Đang kiểm tra tài khoản...
+      </div>
+    );
+  }
 
-  const [presentationFinished, setPresentationFinished] =
-    useState(false);
-
-  useEffect(() => {
-    presentationFinishedRef.current =
-      presentationFinished;
-  }, [presentationFinished]);
+  if (!firebaseUser) {
+    return null;
+  }
 
   // =======================================================
   // CAMERA
@@ -340,7 +435,8 @@ export default function Presentation() {
       try {
         if (
           !navigator.mediaDevices ||
-          !navigator.mediaDevices.getUserMedia
+          !navigator.mediaDevices
+            .getUserMedia
         ) {
           throw new Error(
             "Trình duyệt không hỗ trợ camera."
@@ -348,15 +444,19 @@ export default function Presentation() {
         }
 
         const stream =
-          await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false,
-          });
+          await navigator.mediaDevices.getUserMedia(
+            {
+              video: true,
+              audio: false,
+            }
+          );
 
         if (cancelled) {
           stream
             .getTracks()
-            .forEach((track) => track.stop());
+            .forEach((track) =>
+              track.stop()
+            );
 
           return;
         }
@@ -364,12 +464,22 @@ export default function Presentation() {
         streamRef.current = stream;
 
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+          videoRef.current.srcObject =
+            stream;
 
           try {
             await videoRef.current.play();
-          } catch {}
+          } catch (error) {
+            console.log(
+              "Camera play:",
+              error
+            );
+          }
         }
+
+        console.log(
+          "📷 CAMERA ĐÃ SẴN SÀNG"
+        );
       } catch (error) {
         console.error(
           "Camera error:",
@@ -388,7 +498,9 @@ export default function Presentation() {
       if (streamRef.current) {
         streamRef.current
           .getTracks()
-          .forEach((track) => track.stop());
+          .forEach((track) =>
+            track.stop()
+          );
 
         streamRef.current = null;
       }
@@ -396,7 +508,7 @@ export default function Presentation() {
   }, []);
 
   // =======================================================
-  // SPEECH RECOGNITION
+  // SPEECH RECOGNITION SETUP
   // =======================================================
 
   useEffect(() => {
@@ -406,7 +518,7 @@ export default function Presentation() {
 
     if (!SpeechRecognition) {
       setSpeechError(
-        "Chrome trên thiết bị này không hỗ trợ Speech Recognition."
+        "Trình duyệt này không hỗ trợ nhận giọng nói. Hãy dùng Google Chrome."
       );
 
       return;
@@ -421,49 +533,38 @@ export default function Presentation() {
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
-      recognitionRunningRef.current = true;
-
-      setSpeechListening(true);
-      setSpeechError("");
-
       console.log(
         "🎙️ SPEECH STARTED"
       );
+
+      recognitionRunningRef.current =
+        true;
+
+      setSpeechListening(true);
+      setSpeechError("");
     };
 
     recognition.onaudiostart = () => {
       console.log(
-        "🎤 AUDIO STARTED"
+        "🎤 MICROPHONE AUDIO STARTED"
       );
     };
 
     recognition.onsoundstart = () => {
       console.log(
-        "🔊 SOUND STARTED"
+        "🔊 SOUND DETECTED"
       );
     };
 
     recognition.onspeechstart = () => {
       console.log(
-        "🗣️ SPEECH STARTED - ĐÃ PHÁT HIỆN GIỌNG"
-      );
-    };
-
-    recognition.onspeechend = () => {
-      console.log(
-        "🗣️ SPEECH ENDED"
-      );
-    };
-
-    recognition.onaudioend = () => {
-      console.log(
-        "🎤 AUDIO ENDED"
+        "🗣️ GIỌNG NÓI ĐÃ ĐƯỢC PHÁT HIỆN"
       );
     };
 
     recognition.onresult = (event) => {
       console.log(
-        "🎯 RAW SPEECH RESULT:",
+        "🎯 SPEECH RESULT:",
         event
       );
 
@@ -478,50 +579,30 @@ export default function Presentation() {
           event.results[i];
 
         const text =
-          result[0]?.transcript || "";
+          result?.[0]?.transcript ||
+          "";
 
         if (!text.trim()) {
           continue;
         }
 
         console.log(
-          "📝 SPEECH TEXT:",
+          "📝 NHẬN ĐƯỢC:",
           text,
           "FINAL:",
           result.isFinal
         );
 
-        const speechNow = Date.now();
-
-        if (
-          silenceStartedAtRef.current !== null
-        ) {
-          const duration =
-            (speechNow -
-              silenceStartedAtRef.current) /
-            1000;
-
-          performanceMetricsRef.current.totalSilenceDuration +=
-            Math.max(0, duration);
-
-          performanceMetricsRef.current.maxSilenceDuration =
-            Math.max(
-              performanceMetricsRef.current
-                .maxSilenceDuration,
-              Math.max(0, duration)
-            );
-
-          silenceStartedAtRef.current = null;
-        }
+        const now = Date.now();
 
         lastSpeechAtRef.current =
-          speechNow;
+          now;
 
         setSilenceWarning(false);
 
         if (result.isFinal) {
           finalTranscriptRef.current +=
-            text + " ";
+            text.trim() + " ";
 
           const fillerRegex =
             /\b(ừm+|ờm+|ừ+|ờ+|à+|ơ+|kiểu là|kiểu như|nói chung là|thì là)\b/gi;
@@ -530,15 +611,13 @@ export default function Presentation() {
             text.match(fillerRegex);
 
           if (matches) {
-            const now = Date.now();
-
             matches.forEach(() => {
               fillerTimesRef.current.push(
                 now
               );
 
-              performanceMetricsRef.current.fillerCount +=
-                1;
+              performanceMetricsRef.current
+                .fillerCount += 1;
             });
           }
         } else {
@@ -546,10 +625,11 @@ export default function Presentation() {
         }
       }
 
-      const newTranscript = (
-        finalTranscriptRef.current +
-        interimText
-      ).trim();
+      const newTranscript =
+        (
+          finalTranscriptRef.current +
+          interimText
+        ).trim();
 
       setTranscript(newTranscript);
 
@@ -557,28 +637,18 @@ export default function Presentation() {
         "presentationLiveTranscript",
         newTranscript
       );
-
-      console.log(
-        "📝 SCRIPT:",
-        newTranscript
-      );
     };
 
     recognition.onerror = (event) => {
       console.error(
         "❌ SPEECH ERROR:",
-        event.error,
-        event
+        event.error
       );
 
       recognitionRunningRef.current =
         false;
 
       setSpeechListening(false);
-
-      // -----------------------------------------------
-      // PERMISSION
-      // -----------------------------------------------
 
       if (
         event.error === "not-allowed" ||
@@ -589,52 +659,38 @@ export default function Presentation() {
           false;
 
         setSpeechError(
-          "Chrome không cho Speech Recognition sử dụng microphone. Hãy bấm biểu tượng 🔒 cạnh địa chỉ website và cho phép Microphone."
+          "Chrome đang chặn microphone. Hãy bấm biểu tượng 🔒 cạnh địa chỉ website → Microphone → Allow → tải lại trang."
         );
 
         return;
       }
-
-      // -----------------------------------------------
-      // MICROPHONE
-      // -----------------------------------------------
 
       if (
         event.error ===
         "audio-capture"
       ) {
         setSpeechError(
-          "Chrome không lấy được microphone. Hãy kiểm tra microphone của máy."
+          "Không tìm thấy microphone. Hãy kiểm tra microphone của máy."
         );
 
         return;
       }
 
-      // -----------------------------------------------
-      // NETWORK
-      // -----------------------------------------------
-
       if (
-        event.error ===
-        "network"
+        event.error === "network"
       ) {
         setSpeechError(
-          "Speech Recognition không kết nối được dịch vụ nhận giọng nói. Hãy kiểm tra Internet."
+          "Chrome không kết nối được dịch vụ nhận giọng nói. Hãy kiểm tra Internet rồi bấm lại."
         );
 
         return;
       }
 
-      // -----------------------------------------------
-      // NO SPEECH
-      // -----------------------------------------------
-
       if (
-        event.error ===
-        "no-speech"
+        event.error === "no-speech"
       ) {
         console.log(
-          "ℹ️ Chrome không phát hiện giọng nói."
+          "ℹ️ Không phát hiện giọng nói."
         );
 
         setSpeechError("");
@@ -642,16 +698,11 @@ export default function Presentation() {
         return;
       }
 
-      // -----------------------------------------------
-      // ABORTED
-      // -----------------------------------------------
-
       if (
-        event.error ===
-        "aborted"
+        event.error === "aborted"
       ) {
         console.log(
-          "ℹ️ Speech Recognition bị aborted, sẽ thử khởi động lại."
+          "ℹ️ Speech bị aborted."
         );
 
         setSpeechError("");
@@ -660,13 +711,13 @@ export default function Presentation() {
       }
 
       setSpeechError(
-        `Speech Recognition gặp lỗi: ${event.error}`
+        `Speech Recognition lỗi: ${event.error}`
       );
     };
 
     recognition.onend = () => {
       console.log(
-        "🔚 SPEECH ENDED"
+        "🔚 SPEECH END"
       );
 
       recognitionRunningRef.current =
@@ -699,11 +750,11 @@ export default function Presentation() {
                 recognition.start();
 
                 console.log(
-                  "🔄 SPEECH RESTARTED"
+                  "🔄 SPEECH RESTART"
                 );
               } catch (error) {
                 console.log(
-                  "Recognition restart:",
+                  "Restart error:",
                   error?.message
                 );
               }
@@ -734,7 +785,7 @@ export default function Presentation() {
       }
 
       try {
-        recognition.stop();
+        recognition.abort();
       } catch {}
 
       recognitionRef.current = null;
@@ -746,8 +797,17 @@ export default function Presentation() {
   // =======================================================
 
   const startSpeechRecognition =
-    () => {
+    async () => {
       setSpeechError("");
+
+      if (!firebaseUser) {
+        setSpeechError(
+          "Bạn cần đăng nhập tài khoản trước khi luyện tập."
+        );
+
+        navigate("/login");
+        return;
+      }
 
       const SpeechRecognition =
         window.SpeechRecognition ||
@@ -755,7 +815,7 @@ export default function Presentation() {
 
       if (!SpeechRecognition) {
         setSpeechError(
-          "Trình duyệt không hỗ trợ nhận giọng nói."
+          "Hãy mở website bằng Google Chrome để sử dụng nhận giọng nói."
         );
 
         return;
@@ -766,7 +826,7 @@ export default function Presentation() {
 
       if (!recognition) {
         setSpeechError(
-          "Speech Recognition chưa được khởi tạo."
+          "Speech Recognition chưa sẵn sàng. Hãy tải lại trang."
         );
 
         return;
@@ -776,7 +836,66 @@ export default function Presentation() {
         recognitionRunningRef.current
       ) {
         console.log(
-          "🎙️ Speech Recognition đang chạy."
+          "🎙️ ĐANG NGHE RỒI"
+        );
+
+        return;
+      }
+
+      // ===================================================
+      // XIN QUYỀN MICROPHONE
+      // ===================================================
+
+      try {
+        if (
+          !navigator.mediaDevices ||
+          !navigator.mediaDevices
+            .getUserMedia
+        ) {
+          throw new Error(
+            "Microphone API không được hỗ trợ."
+          );
+        }
+
+        const micStream =
+          await navigator.mediaDevices.getUserMedia(
+            {
+              audio: true,
+              video: false,
+            }
+          );
+
+        // Giữ microphone stream mở
+        // trong lúc trình bày.
+        microphoneStreamRef.current =
+          micStream;
+
+        console.log(
+          "🎤 MICROPHONE PERMISSION OK"
+        );
+
+        console.log(
+          "🎤 MIC TRACKS:",
+          micStream
+            .getAudioTracks()
+            .map(
+              (track) => ({
+                label: track.label,
+                enabled:
+                  track.enabled,
+                readyState:
+                  track.readyState,
+              })
+            )
+        );
+      } catch (error) {
+        console.error(
+          "❌ Microphone permission error:",
+          error
+        );
+
+        setSpeechError(
+          "Không thể truy cập microphone. Hãy cho phép Microphone trong Chrome rồi bấm lại."
         );
 
         return;
@@ -789,11 +908,11 @@ export default function Presentation() {
         recognition.start();
 
         console.log(
-          "🎙️ ĐÃ GỌI recognition.start()"
+          "🚀 ĐÃ GỌI recognition.start()"
         );
       } catch (error) {
         console.error(
-          "❌ Không thể start Speech Recognition:",
+          "❌ START SPEECH ERROR:",
           error
         );
 
@@ -801,9 +920,10 @@ export default function Presentation() {
           error?.name ===
           "InvalidStateError"
         ) {
-          console.log(
-            "Speech Recognition đã đang chạy."
-          );
+          recognitionRunningRef.current =
+            true;
+
+          setSpeechListening(true);
         } else {
           setSpeechError(
             "Không thể bật nhận giọng nói. Hãy bấm lại nút."
@@ -833,15 +953,16 @@ export default function Presentation() {
       return;
     }
 
-    const timer = setInterval(() => {
-      setTimeLeft((previous) => {
-        if (previous <= 1) {
-          return 0;
-        }
+    const timer =
+      setInterval(() => {
+        setTimeLeft((previous) => {
+          if (previous <= 1) {
+            return 0;
+          }
 
-        return previous - 1;
-      });
-    }, 1000);
+          return previous - 1;
+        });
+      }, 1000);
 
     return () => {
       clearInterval(timer);
@@ -852,7 +973,7 @@ export default function Presentation() {
   ]);
 
   // =======================================================
-  // AI COACH: SILENCE + FILLER
+  // SILENCE + FILLER
   // =======================================================
 
   useEffect(() => {
@@ -863,42 +984,159 @@ export default function Presentation() {
       return;
     }
 
-    const checker = setInterval(() => {
-      const now = Date.now();
+    const checker =
+      setInterval(() => {
+        const now = Date.now();
 
-      const silenceSeconds =
-        (now -
-          lastSpeechAtRef.current) /
-        1000;
+        const silenceSeconds =
+          (now -
+            lastSpeechAtRef.current) /
+          1000;
 
-      if (silenceSeconds >= 6) {
-        setSilenceWarning(true);
+        if (silenceSeconds >= 6) {
+          setSilenceWarning(true);
+
+          if (
+            silenceStartedAtRef.current ===
+            null
+          ) {
+            silenceStartedAtRef.current =
+              lastSpeechAtRef.current +
+              6000;
+
+            performanceMetricsRef.current
+              .silenceCount += 1;
+          }
+        } else {
+          setSilenceWarning(false);
+
+          if (
+            silenceStartedAtRef.current !==
+            null
+          ) {
+            const duration =
+              (now -
+                silenceStartedAtRef.current) /
+              1000;
+
+            performanceMetricsRef.current
+              .totalSilenceDuration +=
+              Math.max(0, duration);
+
+            performanceMetricsRef.current
+              .maxSilenceDuration =
+              Math.max(
+                performanceMetricsRef.current
+                  .maxSilenceDuration,
+                Math.max(0, duration)
+              );
+
+            silenceStartedAtRef.current =
+              null;
+          }
+        }
+
+        fillerTimesRef.current =
+          fillerTimesRef.current.filter(
+            (time) =>
+              now - time <= 15000
+          );
+
+        setFillerWarning(
+          fillerTimesRef.current.length >=
+            3
+        );
+      }, 500);
+
+    return () => {
+      clearInterval(checker);
+    };
+  }, [
+    presentationFinished,
+    timeLeft,
+  ]);
+
+  // =======================================================
+  // CONTENT CHECK
+  // =======================================================
+
+  useEffect(() => {
+    if (
+      presentationFinished ||
+      timeLeft <= 0
+    ) {
+      return;
+    }
+
+    const checker =
+      setInterval(() => {
+        const spokenText =
+          finalTranscriptRef.current.trim();
 
         if (
-          silenceStartedAtRef.current ===
-          null
+          spokenText.length < 60
         ) {
-          silenceStartedAtRef.current =
-            lastSpeechAtRef.current +
-            6000;
-
-          performanceMetricsRef.current.silenceCount +=
-            1;
+          setContentWarning(false);
+          return;
         }
-      } else {
-        setSilenceWarning(false);
-      }
 
-      fillerTimesRef.current =
-        fillerTimesRef.current.filter(
-          (time) =>
-            now - time <= 15000
+        const normalizeWords =
+          (value) =>
+            value
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(
+                /[\u0300-\u036f]/g,
+                ""
+              )
+              .replace(
+                /[^a-z0-9\s]/g,
+                " "
+              )
+              .split(/\s+/)
+              .filter(Boolean);
+
+        const spokenWords =
+          new Set(
+            normalizeWords(
+              spokenText
+            )
+          );
+
+        const topicKeywords =
+          topicKeywordsRef.current;
+
+        if (
+          topicKeywords.length === 0
+        ) {
+          setContentWarning(false);
+          return;
+        }
+
+        const matched =
+          topicKeywords.filter(
+            (word) =>
+              spokenWords.has(word)
+          ).length;
+
+        const coverage =
+          matched /
+          topicKeywords.length;
+
+        const clearlyOffTopic =
+          spokenText.length >= 120 &&
+          matched === 0;
+
+        const veryLowCoverage =
+          spokenText.length >= 180 &&
+          topicKeywords.length >= 3 &&
+          coverage < 0.18;
+
+        setContentWarning(
+          clearlyOffTopic ||
+            veryLowCoverage
         );
-
-      setFillerWarning(
-        fillerTimesRef.current.length >= 3
-      );
-    }, 500);
+      }, 2500);
 
     return () => {
       clearInterval(checker);
@@ -909,93 +1147,10 @@ export default function Presentation() {
   ]);
 
   // =======================================================
-  // KIỂM TRA NỘI DUNG
+  // FACE TRACKING
   // =======================================================
 
   useEffect(() => {
-    if (
-      presentationFinished ||
-      timeLeft <= 0
-    ) {
-      return;
-    }
-
-    const checker = setInterval(() => {
-      const spokenText =
-        finalTranscriptRef.current.trim();
-
-      if (spokenText.length < 60) {
-        setContentWarning(false);
-        return;
-      }
-
-      const normalizeWords = (value) =>
-        value
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/[^a-z0-9\s]/g, " ")
-          .split(/\s+/)
-          .filter(Boolean);
-
-      const spokenWords = new Set(
-        normalizeWords(spokenText)
-      );
-
-      const topicKeywords =
-        topicKeywordsRef.current;
-
-      if (topicKeywords.length === 0) {
-        setContentWarning(false);
-        return;
-      }
-
-      const matched =
-        topicKeywords.filter((word) =>
-          spokenWords.has(word)
-        ).length;
-
-      const coverage =
-        matched / topicKeywords.length;
-
-      const clearlyOffTopic =
-        spokenText.length >= 120 &&
-        matched === 0;
-
-      const veryLowCoverage =
-        spokenText.length >= 180 &&
-        topicKeywords.length >= 3 &&
-        coverage < 0.18;
-
-      setContentWarning(
-        clearlyOffTopic ||
-          veryLowCoverage
-      );
-    }, 2500);
-
-    return () => {
-      clearInterval(checker);
-    };
-  }, [
-    presentationFinished,
-    timeLeft,
-  ]);
-
-  // =======================================================
-  // FACE LANDMARK + NHÌN CAMERA
-  // QUAN TRỌNG:
-  // - CHỈ KHỞI TẠO 1 LẦN
-  // - KHÔNG DÙNG GPU
-  // - KHÔNG PHỤ THUỘC timeLeft
-  // =======================================================
-
-  useEffect(() => {
-    if (
-      presentationFinished
-    ) {
-      return;
-    }
-
     let cancelled = false;
     let animationFrame = null;
     let faceLandmarker = null;
@@ -1016,11 +1171,6 @@ export default function Presentation() {
           return;
         }
 
-        /*
-         * QUAN TRỌNG:
-         * Dùng CPU để tránh MediaPipe tranh WebGL
-         * với Three.js.
-         */
         faceLandmarker =
           await FaceLandmarker.createFromOptions(
             vision,
@@ -1028,6 +1178,9 @@ export default function Presentation() {
               baseOptions: {
                 modelAssetPath:
                   "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+
+                // CPU để tránh tranh WebGL
+                // với Three.js.
                 delegate: "CPU",
               },
 
@@ -1061,7 +1214,9 @@ export default function Presentation() {
           }
 
           animationFrame =
-            requestAnimationFrame(detect);
+            requestAnimationFrame(
+              detect
+            );
 
           const video =
             videoRef.current;
@@ -1077,10 +1232,7 @@ export default function Presentation() {
           const now =
             performance.now();
 
-          /*
-           * Chỉ detect khoảng 5 lần / giây.
-           * Không cần detect 60 FPS.
-           */
+          // Chỉ detect khoảng 5 FPS
           if (
             now -
               lastDetectionTime <
@@ -1111,14 +1263,22 @@ export default function Presentation() {
                     gazeStartedAtRef.current) /
                   1000;
 
-                performanceMetricsRef.current.totalGazeAwayDuration +=
-                  Math.max(0, duration);
+                performanceMetricsRef.current
+                  .totalGazeAwayDuration +=
+                  Math.max(
+                    0,
+                    duration
+                  );
 
-                performanceMetricsRef.current.maxGazeAwayDuration =
+                performanceMetricsRef.current
+                  .maxGazeAwayDuration =
                   Math.max(
                     performanceMetricsRef.current
                       .maxGazeAwayDuration,
-                    Math.max(0, duration)
+                    Math.max(
+                      0,
+                      duration
+                    )
                   );
 
                 gazeStartedAtRef.current =
@@ -1187,8 +1347,10 @@ export default function Presentation() {
               );
 
             if (
-              leftEyeWidth < 0.001 ||
-              rightEyeWidth < 0.001
+              leftEyeWidth <
+                0.001 ||
+              rightEyeWidth <
+                0.001
             ) {
               return;
             }
@@ -1208,20 +1370,30 @@ export default function Presentation() {
             const validLeftRatio =
               Math.min(
                 1,
-                Math.max(0, leftRatio)
+                Math.max(
+                  0,
+                  leftRatio
+                )
               );
 
             const validRightRatio =
               Math.min(
                 1,
-                Math.max(0, rightRatio)
+                Math.max(
+                  0,
+                  rightRatio
+                )
               );
 
             const eyesLookingAway =
-              validLeftRatio < 0.22 ||
-              validLeftRatio > 0.78 ||
-              validRightRatio < 0.22 ||
-              validRightRatio > 0.78;
+              validLeftRatio <
+                0.22 ||
+              validLeftRatio >
+                0.78 ||
+              validRightRatio <
+                0.22 ||
+              validRightRatio >
+                0.78;
 
             const faceWidth =
               Math.abs(
@@ -1239,7 +1411,8 @@ export default function Presentation() {
                 ? Math.abs(
                     nose.x -
                       faceCenter
-                  ) / faceWidth
+                  ) /
+                  faceWidth
                 : 0;
 
             const headLookingAway =
@@ -1259,14 +1432,22 @@ export default function Presentation() {
                     gazeStartedAtRef.current) /
                   1000;
 
-                performanceMetricsRef.current.totalGazeAwayDuration +=
-                  Math.max(0, duration);
+                performanceMetricsRef.current
+                  .totalGazeAwayDuration +=
+                  Math.max(
+                    0,
+                    duration
+                  );
 
-                performanceMetricsRef.current.maxGazeAwayDuration =
+                performanceMetricsRef.current
+                  .maxGazeAwayDuration =
                   Math.max(
                     performanceMetricsRef.current
                       .maxGazeAwayDuration,
-                    Math.max(0, duration)
+                    Math.max(
+                      0,
+                      duration
+                    )
                   );
 
                 gazeStartedAtRef.current =
@@ -1304,7 +1485,8 @@ export default function Presentation() {
                 gazeStartedAtRef.current =
                   lookingAwaySinceRef.current;
 
-                performanceMetricsRef.current.gazeAwayCount +=
+                performanceMetricsRef.current
+                  .gazeAwayCount +=
                   1;
               }
             }
@@ -1342,12 +1524,19 @@ export default function Presentation() {
         } catch {}
       }
     };
-  }, [
-    presentationFinished,
-  ]);
+  }, []);
 
   // =======================================================
-  // HẾT GIỜ
+  // PRESENTATION FINISHED REF
+  // =======================================================
+
+  useEffect(() => {
+    presentationFinishedRef.current =
+      presentationFinished;
+  }, [presentationFinished]);
+
+  // =======================================================
+  // TIME UP
   // =======================================================
 
   useEffect(() => {
@@ -1375,10 +1564,27 @@ export default function Presentation() {
       } catch {}
     }
 
+    if (
+      microphoneStreamRef.current
+    ) {
+      microphoneStreamRef.current
+        .getTracks()
+        .forEach((track) =>
+          track.stop()
+        );
+
+      microphoneStreamRef.current =
+        null;
+    }
+
     if (streamRef.current) {
       streamRef.current
         .getTracks()
-        .forEach((track) => track.stop());
+        .forEach((track) =>
+          track.stop()
+        );
+
+      streamRef.current = null;
     }
 
     const redirectTimer =
@@ -1407,7 +1613,9 @@ export default function Presentation() {
       }, 1600);
 
     return () => {
-      clearTimeout(redirectTimer);
+      clearTimeout(
+        redirectTimer
+      );
     };
   }, [
     timeLeft,
@@ -1431,6 +1639,7 @@ export default function Presentation() {
     setShowFinishConfirm(false);
 
     setPresentationFinished(true);
+
     presentationFinishedRef.current =
       true;
 
@@ -1458,10 +1667,27 @@ export default function Presentation() {
       } catch {}
     }
 
+    if (
+      microphoneStreamRef.current
+    ) {
+      microphoneStreamRef.current
+        .getTracks()
+        .forEach((track) =>
+          track.stop()
+        );
+
+      microphoneStreamRef.current =
+        null;
+    }
+
     if (streamRef.current) {
       streamRef.current
         .getTracks()
-        .forEach((track) => track.stop());
+        .forEach((track) =>
+          track.stop()
+        );
+
+      streamRef.current = null;
     }
 
     const finalText =
@@ -1504,7 +1730,8 @@ export default function Presentation() {
   } else if (gazeWarning) {
     warning = {
       icon: "👀",
-      title: "Hãy nhìn vào camera",
+      title:
+        "Hãy nhìn vào camera",
       text:
         "Thử giữ ánh mắt hướng về người nghe nhé!",
     };
@@ -1534,11 +1761,14 @@ export default function Presentation() {
     <div className="presentation-page">
 
       {/* LOGO */}
+
       <div className="presentation-logo">
         FEAR2HEAR
       </div>
 
+
       {/* TIMER */}
+
       <div
         className="presentation-timer-box"
         style={{
@@ -1566,12 +1796,16 @@ export default function Presentation() {
         </div>
       </div>
 
+
       {/* MICROPHONE BUTTON */}
+
       {!presentationFinished &&
         timeLeft > 0 && (
           <button
             type="button"
-            onClick={startSpeechRecognition}
+            onClick={
+              startSpeechRecognition
+            }
             style={{
               position: "fixed",
               top: "105px",
@@ -1579,12 +1813,15 @@ export default function Presentation() {
               transform:
                 "translateX(-50%)",
               zIndex: 151,
-              padding: "8px 18px",
+              padding:
+                "8px 18px",
               border: "none",
-              borderRadius: "999px",
-              background: speechListening
-                ? "rgba(45, 7, 88, 0.96)"
-                : "rgba(115, 39, 39, 0.96)",
+              borderRadius:
+                "999px",
+              background:
+                speechListening
+                  ? "rgba(45, 7, 88, 0.96)"
+                  : "rgba(115, 39, 39, 0.96)",
               color: "#ffffff",
               fontFamily:
                 '"Noto Sans", sans-serif',
@@ -1601,7 +1838,9 @@ export default function Presentation() {
           </button>
         )}
 
+
       {/* SPEECH ERROR */}
+
       {speechError &&
         !presentationFinished &&
         timeLeft > 0 && (
@@ -1616,7 +1855,8 @@ export default function Presentation() {
               width: "620px",
               maxWidth:
                 "calc(100vw - 40px)",
-              padding: "12px 18px",
+              padding:
+                "12px 18px",
               borderRadius: "16px",
               background:
                 "rgba(115, 39, 39, 0.96)",
@@ -1633,7 +1873,9 @@ export default function Presentation() {
           </div>
         )}
 
+
       {/* WARNING */}
+
       {warning &&
         !presentationFinished &&
         timeLeft > 0 && (
@@ -1648,7 +1890,8 @@ export default function Presentation() {
               width: "620px",
               maxWidth:
                 "calc(100vw - 40px)",
-              padding: "16px 22px",
+              padding:
+                "16px 22px",
               borderRadius: "20px",
               background:
                 "rgba(73, 35, 94, 0.98)",
@@ -1665,7 +1908,8 @@ export default function Presentation() {
               style={{
                 fontSize: "22px",
                 fontWeight: 800,
-                whiteSpace: "nowrap",
+                whiteSpace:
+                  "nowrap",
                 color: "#ffffff",
               }}
             >
@@ -1685,7 +1929,9 @@ export default function Presentation() {
           </div>
         )}
 
+
       {/* SAM */}
+
       <div className="presentation-sam-box">
         <Canvas
           camera={{
@@ -1699,7 +1945,9 @@ export default function Presentation() {
             alpha: true,
           }}
         >
-          <ambientLight intensity={1.25} />
+          <ambientLight
+            intensity={1.25}
+          />
 
           <directionalLight
             position={[4, 5, 6]}
@@ -1720,7 +1968,9 @@ export default function Presentation() {
         </Canvas>
       </div>
 
+
       {/* CAMERA */}
+
       <div className="presentation-camera-box">
         {cameraError ? (
           <div className="camera-error">
@@ -1739,15 +1989,20 @@ export default function Presentation() {
         )}
       </div>
 
+
       {/* SAM TEXT */}
+
       <div
         className="presentation-sam-text"
         style={{
-          background: "#2d0758",
+          background:
+            "#2d0758",
         }}
       >
         <div className="sam-listening">
-          SAM đang nghe
+          {speechListening
+            ? "SAM đang nghe"
+            : "SAM chưa nghe"}
         </div>
 
         <div className="sam-instruction">
@@ -1759,11 +2014,14 @@ export default function Presentation() {
         </div>
       </div>
 
+
       {/* SCRIPT */}
+
       <div
         className="presentation-script-box"
         style={{
-          background: "#2d0758",
+          background:
+            "#2d0758",
         }}
       >
         {transcript ? (
@@ -1772,16 +2030,21 @@ export default function Presentation() {
           </div>
         ) : (
           <div className="script-placeholder">
-            Hãy bắt đầu trình bày...
+            Hãy bấm "BẬT NHẬN GIỌNG NÓI"
+            rồi bắt đầu trình bày...
           </div>
         )}
       </div>
 
+
       {/* HOÀN THÀNH */}
+
       {!presentationFinished &&
         timeLeft > 0 && (
           <button
-            onClick={handleFinishClick}
+            onClick={
+              handleFinishClick
+            }
             style={{
               position: "fixed",
               left: "28px",
@@ -1792,7 +2055,8 @@ export default function Presentation() {
               height: "58px",
               border: "none",
               borderRadius: "18px",
-              background: "#ffffff",
+              background:
+                "#ffffff",
               color: "#321348",
               fontFamily:
                 '"Noto Sans", sans-serif',
@@ -1807,7 +2071,9 @@ export default function Presentation() {
           </button>
         )}
 
+
       {/* CONFIRM MODAL */}
+
       {showFinishConfirm && (
         <div
           style={{
@@ -1818,7 +2084,8 @@ export default function Presentation() {
               "rgba(16, 5, 29, 0.82)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent:
+              "center",
           }}
         >
           <div
@@ -1826,9 +2093,11 @@ export default function Presentation() {
               width: "620px",
               maxWidth:
                 "calc(100vw - 40px)",
-              padding: "36px 42px",
+              padding:
+                "36px 42px",
               borderRadius: "28px",
-              background: "#372b46",
+              background:
+                "#372b46",
               boxShadow:
                 "0 20px 60px rgba(0,0,0,0.5)",
               textAlign: "center",
@@ -1840,7 +2109,8 @@ export default function Presentation() {
               style={{
                 fontSize: "28px",
                 fontWeight: 800,
-                whiteSpace: "nowrap",
+                whiteSpace:
+                  "nowrap",
                 color: "#ffffff",
               }}
             >
@@ -1864,17 +2134,21 @@ export default function Presentation() {
                 marginTop: "28px",
                 display: "flex",
                 gap: "14px",
-                justifyContent: "center",
+                justifyContent:
+                  "center",
               }}
             >
               <button
-                onClick={handleCancelFinish}
+                onClick={
+                  handleCancelFinish
+                }
                 style={{
                   width: "150px",
                   height: "50px",
                   border:
                     "1px solid rgba(255,255,255,0.35)",
-                  borderRadius: "15px",
+                  borderRadius:
+                    "15px",
                   background:
                     "transparent",
                   color: "#ffffff",
@@ -1889,13 +2163,17 @@ export default function Presentation() {
               </button>
 
               <button
-                onClick={handleConfirmFinish}
+                onClick={
+                  handleConfirmFinish
+                }
                 style={{
                   width: "150px",
                   height: "50px",
                   border: "none",
-                  borderRadius: "15px",
-                  background: "#ffffff",
+                  borderRadius:
+                    "15px",
+                  background:
+                    "#ffffff",
                   color: "#321348",
                   fontFamily:
                     '"Noto Sans", sans-serif',
@@ -1911,7 +2189,9 @@ export default function Presentation() {
         </div>
       )}
 
+
       {/* KẾT THÚC */}
+
       {(timeLeft === 0 ||
         presentationFinished) && (
         <div className="presentation-timeup">
@@ -1922,6 +2202,7 @@ export default function Presentation() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

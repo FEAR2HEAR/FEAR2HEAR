@@ -5,6 +5,9 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -27,7 +30,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-
   // =========================
   // ĐĂNG NHẬP EMAIL + PASSWORD
   // =========================
@@ -43,26 +45,54 @@ export default function Login() {
     try {
       setLoading(true);
 
-      const userCredential = await signInWithEmailAndPassword(
+      // =========================
+      // FIREBASE PERSISTENCE
+      // =========================
+
+      await setPersistence(
         auth,
-        email.trim(),
-        password
+        rememberMe
+          ? browserLocalPersistence
+          : browserSessionPersistence
       );
 
+      // =========================
+      // FIREBASE LOGIN
+      // =========================
+
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email.trim(),
+          password
+        );
+
       console.log(
-        "Đăng nhập thành công:",
+        "Đăng nhập Firebase thành công:",
         userCredential.user
       );
 
-      // =========================================
-      // ĐĂNG NHẬP THÀNH CÔNG
-      // → TRANG THÔNG TIN & CHÍNH SÁCH
-      // =========================================
+      console.log(
+        "Firebase UID:",
+        userCredential.user.uid
+      );
+
+      console.log(
+        "Firebase email:",
+        userCredential.user.email
+      );
+
+      // =========================
+      // CHUYỂN SANG INFO
+      // =========================
 
       navigate("/info");
 
     } catch (error) {
-      console.error("Lỗi đăng nhập:", error);
+      console.error(
+        "Lỗi đăng nhập Firebase:",
+        error
+      );
 
       if (
         error.code === "auth/invalid-credential" ||
@@ -74,13 +104,17 @@ export default function Login() {
         );
       }
 
-      else if (error.code === "auth/invalid-email") {
+      else if (
+        error.code === "auth/invalid-email"
+      ) {
         setLoginError(
           "Địa chỉ email không hợp lệ."
         );
       }
 
-      else if (error.code === "auth/too-many-requests") {
+      else if (
+        error.code === "auth/too-many-requests"
+      ) {
         setLoginError(
           "Bạn đã thử đăng nhập quá nhiều lần. Vui lòng chờ một lúc rồi thử lại."
         );
@@ -98,7 +132,6 @@ export default function Login() {
       setLoading(false);
     }
   };
-
 
   // =========================
   // QUÊN MẬT KHẨU
@@ -130,19 +163,25 @@ export default function Login() {
         error
       );
 
-      if (error.code === "auth/invalid-email") {
+      if (
+        error.code === "auth/invalid-email"
+      ) {
         setLoginError(
           "Địa chỉ email không hợp lệ."
         );
       }
 
-      else if (error.code === "auth/user-not-found") {
+      else if (
+        error.code === "auth/user-not-found"
+      ) {
         setLoginError(
           "Không tìm thấy tài khoản với email này."
         );
       }
 
-      else if (error.code === "auth/too-many-requests") {
+      else if (
+        error.code === "auth/too-many-requests"
+      ) {
         setLoginError(
           "Bạn đã yêu cầu quá nhiều lần. Vui lòng chờ một lúc rồi thử lại."
         );
@@ -158,7 +197,6 @@ export default function Login() {
     }
   };
 
-
   // =========================
   // GOOGLE LOGIN
   // =========================
@@ -168,6 +206,21 @@ export default function Login() {
 
     try {
       setGoogleLoading(true);
+
+      // =========================
+      // FIREBASE PERSISTENCE
+      // =========================
+
+      await setPersistence(
+        auth,
+        rememberMe
+          ? browserLocalPersistence
+          : browserSessionPersistence
+      );
+
+      // =========================
+      // GOOGLE PROVIDER
+      // =========================
 
       const provider =
         new GoogleAuthProvider();
@@ -179,12 +232,23 @@ export default function Login() {
         );
 
       console.log(
-        "Google login thành công:",
+        "Google login Firebase thành công:",
         result.user
       );
 
-      // Google login thành công
-      // → Thông tin & Chính sách
+      console.log(
+        "Firebase UID:",
+        result.user.uid
+      );
+
+      console.log(
+        "Firebase email:",
+        result.user.email
+      );
+
+      // =========================
+      // CHUYỂN SANG INFO
+      // =========================
 
       navigate("/info");
 
@@ -223,7 +287,6 @@ export default function Login() {
     }
   };
 
-
   // =========================
   // GIAO DIỆN
   // =========================
@@ -232,19 +295,23 @@ export default function Login() {
     <div className="login-page">
 
       {/* LOGO */}
+
       <div className="login-logo">
         FEAR2HEAR
       </div>
 
 
       {/* WAVE */}
+
       <div className="login-wave-lines"></div>
 
 
       {/* LOGIN BOX */}
+
       <div className="login-box">
 
         {/* AVATAR */}
+
         <div className="login-avatar">
           <div className="login-avatar-head"></div>
           <div className="login-avatar-body"></div>
@@ -252,6 +319,7 @@ export default function Login() {
 
 
         {/* EMAIL */}
+
         <input
           type="email"
           className={`login-input ${
@@ -269,6 +337,7 @@ export default function Login() {
 
 
         {/* PASSWORD */}
+
         <div className="login-password-wrapper">
 
           <input
@@ -306,6 +375,7 @@ export default function Login() {
 
 
         {/* ERROR */}
+
         {loginError && (
           <div className="login-error-message">
             {loginError}
@@ -314,6 +384,7 @@ export default function Login() {
 
 
         {/* OPTIONS */}
+
         <div className="login-options">
 
           <label className="remember-label">
@@ -349,6 +420,7 @@ export default function Login() {
 
 
         {/* LOGIN */}
+
         <button
           type="button"
           className="login-submit-button"
@@ -365,6 +437,7 @@ export default function Login() {
 
 
         {/* REGISTER */}
+
         <button
           type="button"
           className="go-register-button"
@@ -377,12 +450,14 @@ export default function Login() {
 
 
         {/* OR */}
+
         <div className="login-or">
           – Hoặc đăng nhập với? –
         </div>
 
 
         {/* GOOGLE */}
+
         <button
           type="button"
           className="google-button"
